@@ -1,0 +1,47 @@
+body {
+	background-color: rgb(185, 185, 185);
+}
+
+.header {
+    width: 100%;
+    padding: 15px;
+    background: #ffffff;
+    font-size: 15px;
+    box-shadow: 8px 8px 5px rgb(168, 168, 168);
+  }
+
+.applinks {
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+    font-size: 12pt;
+    margin-right: 40pt;
+}
+
+div.applinks li {
+    margin-left: 20pt;
+}
+
+.usertools {
+    margin-left: auto;
+}
+
+ul {
+    list-style-type: none;
+}
+
+li {
+    display: inline;
+    padding-left: 10px;
+}
+
+div {
+    display: inline-block;
+}
+
+a:visited,
+a:hover,
+a:active,
+a {
+    text-decoration: none;
+    color: rgb(32, 32, 32);
+}

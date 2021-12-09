@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  {% block title %}<title>Local Library</title>{% endblock %}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+  {% block header %}
+  <div class="header">
+    <div class="logo">
+      <a href="{% url 'index' %}">
+        <img src="/media/img/logo.png" width="50" height="50">
+      </a>
+    </div>
+    <div class="applinks">
+      <ul>
+        <li><a href="{% url 'recipes' %}">РЕЦЕПТЫ</a></li>
+        <li><a href="{% url 'blog' %}">БЛОГ</a></li>
+        <li><a href="{% url 'wiki' %}">ВИКИ</a></li>
+      </ul>
+    </div>
+    <div class="searchblock">
+      <input type="search" name="" id="" placeholder="Search...">
+    </div>
+    <div class="usertools">
+      <ul>
+        <li>Избранное</li>
+        <li>+ Добавить рецепт</li>
+        <li>Войти</li>
+      </ul>
+    </div>
+  </div>
+  {% endblock %}
+  <div class="content-frame">
+    <div class="content">
+      {% block content %}{% endblock %}
+    </div>
+  </div>
+  {% block footer %}{% endblock %}
+</body>
+</html>
