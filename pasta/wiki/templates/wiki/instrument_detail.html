@@ -1,0 +1,15 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<div>
+    <div>
+        <img src="{{ instrument.image.url }}" alt="{{ instrument.name }}" width="100" height="100">
+    </div>
+    <div>
+        {{ instrument.name }}
+    </div>
+    <div>
+        {{ instrument.description }}
+    </div>
+</div>
+{% endblock %}

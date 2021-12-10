@@ -1,0 +1,14 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+{% for ingredient in ingredient_list %}
+<div>
+    <a href="{{ ingredient.get_absolute_url }}">
+        <img src="{{ ingredient.image.url }}" alt="{{ ingredient.name }}" width="100" height="100">
+    </a>
+        <div>
+            <a href="{{ ingredient.get_absolute_url }}">{{ ingredient.name }}</a>
+        </div>
+</div>
+{% endfor %}
+{% endblock %}

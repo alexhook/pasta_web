@@ -3,15 +3,15 @@ from .models import IngredientGroup, Ingredient, Instrument, Cuisine, Menu
 
 @admin.register(IngredientGroup)
 class IngredientGroupAdmin(admin.ModelAdmin):
-    pass
+    prepopulated_fields = {"slug": ("name",)}
 
 @admin.register(Ingredient)
 class IngredientAdmin(admin.ModelAdmin):
-    pass
+    prepopulated_fields = {"slug": ("name",)}
 
 @admin.register(Instrument)
 class InstrumentAdmin(admin.ModelAdmin):
-    pass
+    prepopulated_fields = {"slug": ("name",)}
 
 @admin.register(Cuisine)
 class CuisineAdmin(admin.ModelAdmin):
