@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'homepage.apps.HomepageConfig',
     'recipes.apps.RecipesConfig',
     'blog.apps.BlogConfig',
+    'account.apps.AccountConfig',
 ]
 
 MIDDLEWARE = [

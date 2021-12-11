@@ -38,17 +38,3 @@ class Instrument(models.Model):
     
     def get_absolute_url(self):
         return reverse('instrument-detail', kwargs={'slug':self.slug})
-
-
-class Cuisine(models.Model):
-    name = models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.name
-
-
-class Menu(models.Model):
-    name = models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.name

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import IngredientGroup, Ingredient, Instrument, Cuisine, Menu
+from .models import IngredientGroup, Ingredient, Instrument
 
 @admin.register(IngredientGroup)
 class IngredientGroupAdmin(admin.ModelAdmin):
@@ -12,11 +12,3 @@ class IngredientAdmin(admin.ModelAdmin):
 @admin.register(Instrument)
 class InstrumentAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("name",)}
-
-@admin.register(Cuisine)
-class CuisineAdmin(admin.ModelAdmin):
-    pass
-
-@admin.register(Menu)
-class MenuAdmin(admin.ModelAdmin):
-    pass
