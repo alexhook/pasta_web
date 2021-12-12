@@ -1,6 +1,6 @@
 from django.contrib import admin
-from .models import UserPersonalInfo
+from .models import Profile
 
-@admin.register(UserPersonalInfo)
-class UserPersonalInfoAdmin(admin.ModelAdmin):
+@admin.register(Profile)
+class ProfileAdmin(admin.ModelAdmin):
     pass

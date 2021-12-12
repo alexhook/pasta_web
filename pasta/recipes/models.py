@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models.deletion import DO_NOTHING
 from django.utils.text import slugify
 from django.urls import reverse
 
@@ -19,7 +20,7 @@ class Menu(models.Model):
 
 class Recipe(models.Model):
     title = models.CharField(max_length=100)
-    slug = models.SlugField(unique=True, null=False)
+    slug = models.SlugField(unique=True, null=False, auto_created=True)
     cuisine = models.ForeignKey('Cuisine', on_delete=models.SET_NULL, null=True)
     menu = models.ForeignKey('Menu', on_delete=models.SET_NULL, null=True)
     cooking_time = models.TimeField()
@@ -31,7 +32,8 @@ class Recipe(models.Model):
         return self.title
     
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.title)
+        if not self.slug:
+            self.slug = slugify(self.title)
         return super(Recipe, self).save(*args, **kwargs)
     
     def get_absolute_url(self):
@@ -46,13 +48,13 @@ class AmoutUnit(models.Model):
 
 
 class RecipeIngredient(models.Model):
-    name = models.CharField(max_length=100)
+    ingredient = models.ForeignKey('wiki.Ingredient', on_delete=DO_NOTHING)
     amount = models.IntegerField()
     unit = models.ForeignKey('AmoutUnit', on_delete=models.DO_NOTHING)
     recipe = models.ForeignKey('Recipe', on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.name
+        return f'{self.ingredient.name}: {self.recipe.title}'
 
 
 class RecipeStep(models.Model):

@@ -1,0 +1,37 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<div class="recipe-detail">
+    <div class="title">
+        <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}" width="250" height="250">
+        <span class="menu">{{ recipe.menu.name }}</span>
+        <span class="cuisine">{{ recipe.cuisine.name }}</span>
+        <h1>{{ recipe.title }}</h1>
+        <span class="description">{{ recipe.description }}</span>
+        <span class="time">{{ recipe.cooking_time }}</span>
+    </div>
+    <div class="ingredients-list">
+        <h3>Ингредиенты</h3>
+        <ul>
+            {% for ingredient in recipe.recipeingredient_set.all %}
+            <li>
+                <span class="ingredient">{{ ingredient.ingredient.name }}</span>
+                <span class="line"></span>
+                <span class="amount">{{ ingredient.amount }} {{ ingredient.unit.name }}</span>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div>
+        <h3>Пошаговый рецепт</h3>
+        <ul>
+            {% for step in recipe.recipestep_set.all %}
+            <li>
+                <img src="{{ step.image.url }}" width="100" height="100">
+                <span>{{ step.description }}</span>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}

@@ -101,7 +101,7 @@ header .usertools li a
     position: absolute;
     top: 0;
     left: 10%;
-    height: 100%;
+    min-height: 100%;
     width: 80%;
     display: flex;
     justify-content: center;
