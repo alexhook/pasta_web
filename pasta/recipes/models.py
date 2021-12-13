@@ -23,10 +23,11 @@ class Recipe(models.Model):
     slug = models.SlugField(unique=True, null=False, auto_created=True)
     cuisine = models.ForeignKey('Cuisine', on_delete=models.SET_NULL, null=True)
     menu = models.ForeignKey('Menu', on_delete=models.SET_NULL, null=True)
-    cooking_time = models.TimeField()
+    cooking_time = models.DurationField(null=True)
     image = models.ImageField(upload_to='recipes/recipe/')
     description = models.TextField()
     author = models.ForeignKey(User, on_delete=models.CASCADE)
+    is_published = models.BooleanField(null=False, blank=False, default=0)
 
     def __str__(self):
         return self.title
