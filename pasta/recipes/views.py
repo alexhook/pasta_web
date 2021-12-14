@@ -3,12 +3,11 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.http.request import HttpRequest
 from django.urls import reverse
-from django.utils.text import slugify
 from django.views import generic
 from .models import Cuisine, Menu, Recipe, AmoutUnit, RecipeIngredient, RecipeStep
-from account.models import Profile
 from django.views.generic.edit import CreateView
 from .forms import RecipeModelForm, RecipeIngredientModelForm, RecipeStepModelForm
+from django.forms import formset_factory
 
 def index(request: HttpRequest):
     pass
@@ -29,26 +28,47 @@ class RecipeDetailView(generic.DetailView):
 
 
 def recipe_create_form(request: HttpRequest):
-    if request.method == 'POST':
-        recipe_form = RecipeModelForm(request.POST, request.FILES, prefix='-recipe')
-        # recipe_ingredient_form = RecipeIngredientModelForm(request.POST, prefix='-recipe-ingredient')
-        # recipe_step_form = RecipeStepModelForm(request.POST, prefix='-recipe-step')
-        # if recipe_form.is_valid() and recipe_ingredient_form.is_valid() and recipe_step_form.is_valid():
-        if recipe_form.is_valid():
-            # recipe_form.slug = slugify(recipe_form.title)
-            # recipe_form.author = request.user.id
-            # if request.POST.get('submit-save'):
-            #     recipe_form.is_published = 0
-            # if request.POST.get('submit-publish'):
-            #     recipe_form.is_published = 1
-            recipe_form.save()
-            print(recipe_form.id)
-            print(request)
+    RecipeIngredientFormSet = formset_factory(RecipeIngredientModelForm, absolute_max=30, max_num=30, extra=1)
+    RecipeStepFormSet = formset_factory(RecipeStepModelForm, absolute_max=30, max_num=30, extra=1)
 
-            return HttpResponseRedirect(reverse('recipe-detail'))
+    if request.method == 'POST':
+
+        recipe_form = RecipeModelForm(request.POST, request.FILES, prefix='recipe')
+        ingredient_formset = RecipeIngredientFormSet(request.POST, prefix='ingredient')
+        step_formset = RecipeStepFormSet(request.POST, request.FILES, prefix='step')
+        
+        if recipe_form.is_valid() and ingredient_formset.is_valid() and step_formset.is_valid():
+            
+            recipe = recipe_form.save(commit=False)
+            recipe.author = request.user
+            if request.POST.get('submit-publish'):
+                recipe.is_published = 1
+            recipe.save()
+
+            for form in ingredient_formset:
+                ingredient = form.save(commit=False)
+                ingredient.recipe = recipe
+                ingredient.save()
+
+            for form in step_formset:
+                step = form.save(commit=False)
+                step.recipe = recipe
+                step.save()
+
+            return HttpResponseRedirect(reverse('recipe-detail', kwargs={'slug': recipe.slug}))
     else:
-        recipe_form = RecipeModelForm(prefix='-recipe')
+        recipe_form = RecipeModelForm(prefix='recipe')
+        ingredient_formset = RecipeIngredientFormSet(prefix='ingredient')
+        step_formset = RecipeStepFormSet(prefix='step')
     
-    return render(request, 'recipes/recipe_form.html', {'recipe_form': recipe_form})
+    return render(
+        request,
+        'recipes/recipe_form.html',
+        {
+            'recipe_form': recipe_form, 
+            'ingredient_formset': ingredient_formset, 
+            'step_formset': step_formset
+        }
+    )
 
 

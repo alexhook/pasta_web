@@ -29,7 +29,7 @@
           <!-- <i class="fa fa-bookmark" aria-hidden="true"></i> -->
         </div>
         <div>
-          <li><a href="">Добавить рецепт</a></li>
+          <li><a href="{% url 'recipe-create' %}">Добавить рецепт</a></li>
           <!-- <i class="fa fa-plus" aria-hidden="true"></i> -->
         </div>
         <div>
@@ -46,4 +46,5 @@
   </div>
   {% block footer %}{% endblock %}
 </body>
+{% block scripts %}{% endblock %}
 </html>

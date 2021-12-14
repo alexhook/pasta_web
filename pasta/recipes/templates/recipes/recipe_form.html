@@ -2,13 +2,102 @@
 
 {% block content %}
 
-<form action="" method="post">
+<form action="" method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    <table>
-    {{ recipe_form.as_table }}
-    </table>
-    <input type="submit" name="submit-save" value="Save">
-    <input type="submit" name="submit-publish" value="Publish">
+    
+    <div class="fieldWrapper">
+        {{ recipe_form.title.errors }}
+        {{ recipe_form.title.label_tag }}
+        {{ recipe_form.title }}
+    </div>
+    <div class="fieldWrapper">
+        {{ recipe_form.cuisine.errors }}
+        {{ recipe_form.cuisine.label_tag }}
+        {{ recipe_form.cuisine }}
+    </div>
+    <div class="fieldWrapper">
+        {{ recipe_form.menu.errors }}
+        {{ recipe_form.menu.label_tag }}
+        {{ recipe_form.menu }}
+    </div>
+    <div class="fieldWrapper">
+        {{ recipe_form.cooking_time.errors }}
+        {{ recipe_form.cooking_time.label_tag }}
+        {{ recipe_form.cooking_time }}
+    </div>
+    <div class="fieldWrapper">
+        {{ recipe_form.image.errors }}
+        {{ recipe_form.image.label_tag }}
+        {{ recipe_form.image }}
+    </div>
+    <div class="fieldWrapper">
+        {{ recipe_form.description.errors }}
+        {{ recipe_form.description.label_tag }}
+        {{ recipe_form.description }}
+    </div>
+    
+    <h3>Ингредиенты</h3>
+    <div id="ingredients-form">
+        {% for form in ingredient_formset %}
+        <div>
+            {{ form.ingredient }}
+            {{ form.amount }}
+            {{ form.unit }}
+        </div>
+        {% endfor %}
+    </div>
+    {{ ingredient_formset.management_form }}
+    <a href="javascript:void(0)" id="add_ingredient" type="button">Добавить ингредиент</a>
+
+    <h3>Шаги</h3>
+    <div id="steps-form">
+        {% for form in step_formset %}
+        <div>
+            {{ form.image }}
+            {{ form.description }}
+        </div>
+        {% endfor %}
+    </div>
+    {{ step_formset.management_form }}
+    <a href="javascript:void(0)" id="add_step" type="button">Добавить шаг</a>
+
+    <div>
+        <input type="submit" name="submit-save" value="Save">
+        <input type="submit" name="submit-publish" value="Publish">
+    </div>
 
 </form>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+<script>
+var ingredient_form_count = {{ ingredient_formset.total_form_count }};
+var step_form_count = {{ step_formset.total_form_count }};
+
+$('#add_ingredient').click(function() {
+    var new_form = (
+        '<div>' +
+        '{{ ingredient_formset.empty_form.ingredient|escapejs }} ' +
+        '{{ ingredient_formset.empty_form.amount|escapejs }} ' +
+        '{{ ingredient_formset.empty_form.unit|escapejs }}' +
+        '</div>'
+    ).replace(/__prefix__/g, ingredient_form_count);
+    $('#ingredients-form').append(new_form)   
+    ingredient_form_count++;
+    $('#id_ingredient-TOTAL_FORMS').val(ingredient_form_count);
+});
+
+$('#add_step').click(function() {
+    var new_form = (
+        '<div>' +
+        '{{ step_formset.empty_form.image|escapejs }} ' +
+        '{{ step_formset.empty_form.description|escapejs }} ' +
+        '</div>'
+    ).replace(/__prefix__/g, step_form_count);
+    $('#steps-form').append(new_form)   
+    step_form_count++;
+    $('#id_step-TOTAL_FORMS').val(step_form_count);
+});
+</script>
 {% endblock %}
