@@ -28,8 +28,8 @@ class RecipeDetailView(generic.DetailView):
 
 
 def recipe_create_form(request: HttpRequest):
-    RecipeIngredientFormSet = formset_factory(RecipeIngredientModelForm, absolute_max=30, max_num=30, extra=1)
-    RecipeStepFormSet = formset_factory(RecipeStepModelForm, absolute_max=30, max_num=30, extra=1)
+    RecipeIngredientFormSet = formset_factory(RecipeIngredientModelForm, absolute_max=30, max_num=30)
+    RecipeStepFormSet = formset_factory(RecipeStepModelForm, absolute_max=30, max_num=30)
 
     if request.method == 'POST':
 
@@ -46,14 +46,19 @@ def recipe_create_form(request: HttpRequest):
             recipe.save()
 
             for form in ingredient_formset:
-                ingredient = form.save(commit=False)
-                ingredient.recipe = recipe
-                ingredient.save()
+                print('-------------------------------------')
+                print(form.cleaned_data)
+                print('-------------------------------------')
+                if form.cleaned_data:
+                    ingredient = form.save(commit=False)
+                    ingredient.recipe = recipe
+                    ingredient.save()
 
             for form in step_formset:
-                step = form.save(commit=False)
-                step.recipe = recipe
-                step.save()
+                if form.cleaned_data:
+                    step = form.save(commit=False)
+                    step.recipe = recipe
+                    step.save()
 
             return HttpResponseRedirect(reverse('recipe-detail', kwargs={'slug': recipe.slug}))
     else:

@@ -43,11 +43,12 @@
             {{ form.ingredient }}
             {{ form.amount }}
             {{ form.unit }}
+            <i class="fa fa-times ingredient-delete" aria-hidden="true"></i>
         </div>
         {% endfor %}
     </div>
     {{ ingredient_formset.management_form }}
-    <a href="javascript:void(0)" id="add_ingredient" type="button">Добавить ингредиент</a>
+    <span id="add_ingredient">Добавить ингредиент</span>
 
     <h3>Шаги</h3>
     <div id="steps-form">
@@ -55,11 +56,12 @@
         <div>
             {{ form.image }}
             {{ form.description }}
+            <i class="fa fa-times step-delete" aria-hidden="true"></i>
         </div>
         {% endfor %}
     </div>
     {{ step_formset.management_form }}
-    <a href="javascript:void(0)" id="add_step" type="button">Добавить шаг</a>
+    <span id="add_step">Добавить шаг</span>
 
     <div>
         <input type="submit" name="submit-save" value="Save">
@@ -80,10 +82,11 @@ $('#add_ingredient').click(function() {
         '<div>' +
         '{{ ingredient_formset.empty_form.ingredient|escapejs }} ' +
         '{{ ingredient_formset.empty_form.amount|escapejs }} ' +
-        '{{ ingredient_formset.empty_form.unit|escapejs }}' +
+        '{{ ingredient_formset.empty_form.unit|escapejs }} ' +
+        '<i class="fa fa-times ingredient-delete" aria-hidden="true"></i>' +
         '</div>'
     ).replace(/__prefix__/g, ingredient_form_count);
-    $('#ingredients-form').append(new_form)   
+    $('#ingredients-form').append(new_form);
     ingredient_form_count++;
     $('#id_ingredient-TOTAL_FORMS').val(ingredient_form_count);
 });
@@ -93,11 +96,25 @@ $('#add_step').click(function() {
         '<div>' +
         '{{ step_formset.empty_form.image|escapejs }} ' +
         '{{ step_formset.empty_form.description|escapejs }} ' +
+        '<i class="fa fa-times step-delete" aria-hidden="true"></i>' +
         '</div>'
     ).replace(/__prefix__/g, step_form_count);
-    $('#steps-form').append(new_form)   
+    $('#steps-form').append(new_form);
     step_form_count++;
     $('#id_step-TOTAL_FORMS').val(step_form_count);
 });
+
+$('#ingredients-form').on('click', '.ingredient-delete', function(){
+    $(this).closest('div').remove();
+    ingredient_form_count--;
+    $('#id_ingredient-TOTAL_FORMS').val(ingredient_form_count);
+});
+
+$('#steps-form').on('click', '.step-delete', function(){
+    $(this).closest('div').remove();
+    step_form_count--;
+    $('#id_step-TOTAL_FORMS').val(step_form_count);
+});
+
 </script>
 {% endblock %}
