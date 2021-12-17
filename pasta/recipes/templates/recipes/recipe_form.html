@@ -38,12 +38,18 @@
     
     <h3>Ингредиенты</h3>
     <div id="ingredients-form">
+        {% for error in ingredient_formset.non_form_errors %}
+        <span class="errors">{{ error }}</span>
+        {% endfor %}
         {% for form in ingredient_formset %}
-        <div>
+        <div class="ingredient">
             {{ form.ingredient }}
             {{ form.amount }}
             {{ form.unit }}
             <i class="fa fa-times ingredient-delete" aria-hidden="true"></i>
+            {% if form.errors %}
+            <span class="errors">Заполните поля или удалите их.</span>
+            {% endif %}
         </div>
         {% endfor %}
     </div>
@@ -53,7 +59,7 @@
     <h3>Шаги</h3>
     <div id="steps-form">
         {% for form in step_formset %}
-        <div>
+        <div class="step">
             {{ form.image }}
             {{ form.description }}
             <i class="fa fa-times step-delete" aria-hidden="true"></i>
@@ -78,43 +84,65 @@ var ingredient_form_count = {{ ingredient_formset.total_form_count }};
 var step_form_count = {{ step_formset.total_form_count }};
 
 $('#add_ingredient').click(function() {
-    var new_form = (
-        '<div>' +
-        '{{ ingredient_formset.empty_form.ingredient|escapejs }} ' +
-        '{{ ingredient_formset.empty_form.amount|escapejs }} ' +
-        '{{ ingredient_formset.empty_form.unit|escapejs }} ' +
-        '<i class="fa fa-times ingredient-delete" aria-hidden="true"></i>' +
-        '</div>'
-    ).replace(/__prefix__/g, ingredient_form_count);
-    $('#ingredients-form').append(new_form);
-    ingredient_form_count++;
-    $('#id_ingredient-TOTAL_FORMS').val(ingredient_form_count);
+    if ({{ ingredient_formset.absolute_max }} > ingredient_form_count) {
+        var new_form = (
+            '<div class="ingredient">' +
+            '{{ ingredient_formset.empty_form.ingredient|escapejs }} ' +
+            '{{ ingredient_formset.empty_form.amount|escapejs }} ' +
+            '{{ ingredient_formset.empty_form.unit|escapejs }} ' +
+            '<i class="fa fa-times ingredient-delete" aria-hidden="true"></i>' +
+            '</div>'
+        ).replace(/__prefix__/g, ingredient_form_count);
+        $('#ingredients-form').append(new_form);
+        ingredient_form_count++;
+        $('#id_ingredient-TOTAL_FORMS').val(ingredient_form_count);
+    };
 });
 
 $('#add_step').click(function() {
-    var new_form = (
-        '<div>' +
-        '{{ step_formset.empty_form.image|escapejs }} ' +
-        '{{ step_formset.empty_form.description|escapejs }} ' +
-        '<i class="fa fa-times step-delete" aria-hidden="true"></i>' +
-        '</div>'
-    ).replace(/__prefix__/g, step_form_count);
-    $('#steps-form').append(new_form);
-    step_form_count++;
-    $('#id_step-TOTAL_FORMS').val(step_form_count);
+    if ({{ step_formset.absolute_max }} > step_form_count) {
+        var new_form = (
+            '<div class="step">' +
+            '{{ step_formset.empty_form.image|escapejs }} ' +
+            '{{ step_formset.empty_form.description|escapejs }} ' +
+            '<i class="fa fa-times step-delete" aria-hidden="true"></i>' +
+            '</div>'
+        ).replace(/__prefix__/g, step_form_count);
+        $('#steps-form').append(new_form);
+        step_form_count++;
+        $('#id_step-TOTAL_FORMS').val(step_form_count);
+    };
 });
 
 $('#ingredients-form').on('click', '.ingredient-delete', function(){
     $(this).closest('div').remove();
     ingredient_form_count--;
     $('#id_ingredient-TOTAL_FORMS').val(ingredient_form_count);
+    updatePrefix('.ingredient');
 });
 
 $('#steps-form').on('click', '.step-delete', function(){
     $(this).closest('div').remove();
     step_form_count--;
     $('#id_step-TOTAL_FORMS').val(step_form_count);
+    updatePrefix('.step');
 });
+
+function updatePrefix(divClassName) {
+    let i = 0;
+    $(divClassName).each(function (){
+        $(this).children().each(function (){
+            if (!$(this).is('i')) {
+                let id = $(this).attr('id').split('-');
+                let name = $(this).attr('name').split('-');
+                $(this).attr('id', id[0].concat('-', i, '-', id[2]));
+                $(this).attr('name', name[0].concat('-', i, '-', name[2]));
+            };
+        });
+        i++;
+    });
+}
+
 
 </script>
 {% endblock %}

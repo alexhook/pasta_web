@@ -17,7 +17,7 @@
             <li>
                 <span class="ingredient">{{ ingredient.ingredient.name }}</span>
                 <span class="line"></span>
-                <span class="amount">{{ ingredient.amount }} {{ ingredient.unit.name }}</span>
+                <span class="amount">{% if ingredient.amount %}{{ ingredient.amount }} {% endif %}{{ ingredient.unit.name }}</span>
             </li>
             {% endfor %}
         </ul>

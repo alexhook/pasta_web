@@ -18,13 +18,13 @@ class Menu(models.Model):
 
 
 class Recipe(models.Model):
-    title = models.CharField(max_length=100)
+    title = models.CharField(max_length=100, verbose_name='Название рецепта')
     slug = models.SlugField(unique=True, blank=True, null=False)
-    cuisine = models.ForeignKey('Cuisine', on_delete=models.SET_NULL, null=True)
-    menu = models.ForeignKey('Menu', on_delete=models.SET_NULL, null=True)
-    cooking_time = models.DurationField(null=True)
-    image = models.ImageField(upload_to='recipes/recipe/')
-    description = models.TextField()
+    cuisine = models.ForeignKey('Cuisine', on_delete=models.SET_NULL, null=True, verbose_name='Кухня')
+    menu = models.ForeignKey('Menu', on_delete=models.SET_NULL, null=True, verbose_name='Меню')
+    cooking_time = models.DurationField(null=True, verbose_name='Время приготовления')
+    image = models.ImageField(upload_to='recipes/recipe/', verbose_name='Фотография готового блюда')
+    description = models.TextField(verbose_name='Описание блюда')
     author = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=False)
     is_published = models.BooleanField(blank=True, default=0)
 
@@ -41,7 +41,8 @@ class Recipe(models.Model):
 
 
 class AmoutUnit(models.Model):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=20)
+    need_amount = models.BooleanField(default=1)
 
     def __str__(self):
         return self.name
@@ -49,7 +50,7 @@ class AmoutUnit(models.Model):
 
 class RecipeIngredient(models.Model):
     ingredient = models.ForeignKey('wiki.Ingredient', on_delete=models.DO_NOTHING)
-    amount = models.IntegerField()
+    amount = models.IntegerField(blank=True, null=True)
     unit = models.ForeignKey('AmoutUnit', on_delete=models.DO_NOTHING)
     recipe = models.ForeignKey('Recipe', on_delete=models.CASCADE, blank=True)
 

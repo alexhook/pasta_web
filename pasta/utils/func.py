@@ -12,3 +12,11 @@ def unique_slugify(instance, title=None, slug=None):
     if instance.__class__.objects.filter(slug=new_slug).exists():
         new_slug = unique_slugify(instance, slug=slug)
     return new_slug
+
+def get_model_dict(model_objs):
+    data = []
+    for obj in model_objs:
+        data.append({
+            field: obj.get(field)
+            for field in obj.fields
+        })

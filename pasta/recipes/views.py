@@ -1,13 +1,13 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseRedirect
 from django.http.request import HttpRequest
 from django.urls import reverse
 from django.views import generic
-from .models import Cuisine, Menu, Recipe, AmoutUnit, RecipeIngredient, RecipeStep
-from django.views.generic.edit import CreateView
-from .forms import RecipeModelForm, RecipeIngredientModelForm, RecipeStepModelForm
+from .models import Recipe, RecipeIngredient, RecipeStep
+from .forms import RecipeModelForm, RecipeIngredientModelForm, RecipeStepModelForm, BaseRecipeIngredientFormSet
 from django.forms import formset_factory
+from django.contrib.auth.decorators import login_required
+from wiki.models import Ingredient
 
 def index(request: HttpRequest):
     pass
@@ -27,8 +27,9 @@ class RecipeDetailView(generic.DetailView):
         return Recipe.objects.select_related('cuisine', 'menu', 'author__profile').prefetch_related('recipeingredient_set__ingredient', 'recipeingredient_set__unit','recipestep_set').get(slug=self.kwargs['slug'])
 
 
-def recipe_create_form(request: HttpRequest):
-    RecipeIngredientFormSet = formset_factory(RecipeIngredientModelForm, absolute_max=30, max_num=30)
+@login_required(login_url='/admin/')
+def recipe_form(request: HttpRequest, slug=None):
+    RecipeIngredientFormSet = formset_factory(RecipeIngredientModelForm, formset=BaseRecipeIngredientFormSet, absolute_max=30, max_num=30)
     RecipeStepFormSet = formset_factory(RecipeStepModelForm, absolute_max=30, max_num=30)
 
     if request.method == 'POST':
@@ -46,9 +47,6 @@ def recipe_create_form(request: HttpRequest):
             recipe.save()
 
             for form in ingredient_formset:
-                print('-------------------------------------')
-                print(form.cleaned_data)
-                print('-------------------------------------')
                 if form.cleaned_data:
                     ingredient = form.save(commit=False)
                     ingredient.recipe = recipe
@@ -62,9 +60,19 @@ def recipe_create_form(request: HttpRequest):
 
             return HttpResponseRedirect(reverse('recipe-detail', kwargs={'slug': recipe.slug}))
     else:
-        recipe_form = RecipeModelForm(prefix='recipe')
-        ingredient_formset = RecipeIngredientFormSet(prefix='ingredient')
-        step_formset = RecipeStepFormSet(prefix='step')
+        if slug:
+            recipe = get_object_or_404(Recipe, slug=slug)
+            print('---------------------------------')
+            print(RecipeIngredient.objects.filter(recipe=recipe.id).values())
+            print(Ingredient.objects.get(pk=1))
+            print('---------------------------------')
+            recipe_form = RecipeModelForm(instance=recipe, prefix='recipe')
+            ingredient_formset = RecipeIngredientFormSet(initial=RecipeIngredient.objects.filter(recipe=recipe.id).values(), prefix='ingredient')
+            step_formset = RecipeStepFormSet(initial=RecipeStep.objects.filter(recipe=recipe.id).values(), prefix='step')
+        else:
+            recipe_form = RecipeModelForm(prefix='recipe')
+            ingredient_formset = RecipeIngredientFormSet(prefix='ingredient')
+            step_formset = RecipeStepFormSet(prefix='step')
     
     return render(
         request,

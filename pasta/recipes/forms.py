@@ -1,5 +1,7 @@
-from django.forms import ModelForm, fields, models
+from django.forms import ModelForm
+from django.forms.formsets import BaseFormSet
 from .models import Recipe, RecipeIngredient, RecipeStep
+from django.core.exceptions import ValidationError
 
 class RecipeModelForm(ModelForm):
     class Meta:
@@ -17,3 +19,15 @@ class RecipeStepModelForm(ModelForm):
     class Meta:
         model = RecipeStep
         fields = '__all__'
+
+
+class BaseRecipeIngredientFormSet(BaseFormSet):
+    def clean(self):
+        if any(self.errors):
+            return
+        ingredients = []
+        for form in self.forms:
+            ingredient = form.cleaned_data.get('ingredient')
+            if ingredient in ingredients:
+                raise ValidationError('Ингредиенты не должны повторяться.')
+            ingredients.append(ingredient)
