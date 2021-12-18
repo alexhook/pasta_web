@@ -47,6 +47,7 @@
             {{ form.amount }}
             {{ form.unit }}
             <i class="fa fa-times ingredient-delete" aria-hidden="true"></i>
+            {{ form.errors }}
             {% if form.errors %}
             <span class="errors">Заполните поля или удалите их.</span>
             {% endif %}
@@ -58,6 +59,9 @@
 
     <h3>Шаги</h3>
     <div id="steps-form">
+        {% for error in step_formset.non_form_errors %}
+        <span class="errors">{{ error }}</span>
+        {% endfor %}
         {% for form in step_formset %}
         <div class="step">
             {{ form.image }}
