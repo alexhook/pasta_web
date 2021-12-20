@@ -18,7 +18,7 @@ class Menu(models.Model):
 
 
 class Recipe(models.Model):
-    title = models.CharField(max_length=100, verbose_name='Название рецепта')
+    title = models.CharField(max_length=50, verbose_name='Название рецепта')
     slug = models.SlugField(unique=True, blank=True, null=False)
     cuisine = models.ForeignKey('Cuisine', on_delete=models.SET_NULL, null=True, verbose_name='Кухня')
     menu = models.ForeignKey('Menu', on_delete=models.SET_NULL, null=True, verbose_name='Меню')
