@@ -1,10 +1,14 @@
 {% extends "base_generic.html" %}
 
+{% block title %}<title>Pasta | Рецепты</title>{% endblock %}
+
 {% block content %}
 
 <form action="" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     
+    {{ recipe_form.author.as_hidden }}
+    {{ recipe_form.slug.as_hidden }}
     <div class="fieldWrapper">
         {{ recipe_form.title.errors }}
         {{ recipe_form.title.label_tag }}
@@ -42,12 +46,13 @@
         <span class="errors">{{ error }}</span>
         {% endfor %}
         {% for form in ingredient_formset %}
-        <div class="ingredient">
+        <div class="ingredient" {% if form.DELETE.value %}hidden="hidden"{% endif %}>
+            {{ form.id }}
             {{ form.ingredient }}
             {{ form.amount }}
             {{ form.unit }}
-            <i class="fa fa-times ingredient-delete" aria-hidden="true"></i>
-            {{ form.errors }}
+            {{ form.DELETE.as_hidden }}
+            <i class="fa fa-times delete-form" aria-hidden="true"></i>
             {% if form.errors %}
             <span class="errors">Заполните поля или удалите их.</span>
             {% endif %}
@@ -63,10 +68,12 @@
         <span class="errors">{{ error }}</span>
         {% endfor %}
         {% for form in step_formset %}
-        <div class="step">
+        <div class="step" {% if form.DELETE.value %}hidden="hidden"{% endif %}>
+            {{ form.id }}
             {{ form.image }}
             {{ form.description }}
-            <i class="fa fa-times step-delete" aria-hidden="true"></i>
+            {{ form.DELETE.as_hidden }}
+            <i class="fa fa-times delete-form" aria-hidden="true"></i>
         </div>
         {% endfor %}
     </div>
@@ -94,7 +101,8 @@ $('#add_ingredient').click(function() {
             '{{ ingredient_formset.empty_form.ingredient|escapejs }} ' +
             '{{ ingredient_formset.empty_form.amount|escapejs }} ' +
             '{{ ingredient_formset.empty_form.unit|escapejs }} ' +
-            '<i class="fa fa-times ingredient-delete" aria-hidden="true"></i>' +
+            '{{ ingredient_formset.empty_form.DELETE.as_hidden|escapejs }} ' +
+            '<i class="fa fa-times delete-form" aria-hidden="true"></i>' +
             '</div>'
         ).replace(/__prefix__/g, ingredient_form_count);
         $('#ingredients-form').append(new_form);
@@ -109,7 +117,8 @@ $('#add_step').click(function() {
             '<div class="step">' +
             '{{ step_formset.empty_form.image|escapejs }} ' +
             '{{ step_formset.empty_form.description|escapejs }} ' +
-            '<i class="fa fa-times step-delete" aria-hidden="true"></i>' +
+            '{{ step_formset.empty_form.DELETE.as_hidden|escapejs }} ' +
+            '<i class="fa fa-times delete-form" aria-hidden="true"></i>' +
             '</div>'
         ).replace(/__prefix__/g, step_form_count);
         $('#steps-form').append(new_form);
@@ -118,35 +127,11 @@ $('#add_step').click(function() {
     };
 });
 
-$('#ingredients-form').on('click', '.ingredient-delete', function(){
-    $(this).closest('div').remove();
-    ingredient_form_count--;
-    $('#id_ingredient-TOTAL_FORMS').val(ingredient_form_count);
-    updatePrefix('.ingredient');
+$('#ingredients-form, #steps-form').on('click', '.delete-form', function(){
+    let parrentDiv = $(this).closest('div');
+    parrentDiv.find('input[id*="DELETE"]:hidden').attr('value', 'on');
+    parrentDiv.attr('hidden', true);
 });
-
-$('#steps-form').on('click', '.step-delete', function(){
-    $(this).closest('div').remove();
-    step_form_count--;
-    $('#id_step-TOTAL_FORMS').val(step_form_count);
-    updatePrefix('.step');
-});
-
-function updatePrefix(divClassName) {
-    let i = 0;
-    $(divClassName).each(function (){
-        $(this).children().each(function (){
-            if (!$(this).is('i')) {
-                let id = $(this).attr('id').split('-');
-                let name = $(this).attr('name').split('-');
-                $(this).attr('id', id[0].concat('-', i, '-', id[2]));
-                $(this).attr('name', name[0].concat('-', i, '-', name[2]));
-            };
-        });
-        i++;
-    });
-}
-
 
 </script>
 {% endblock %}

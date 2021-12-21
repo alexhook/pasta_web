@@ -32,13 +32,15 @@ def recipe_create_form(request: HttpRequest):
         absolute_max=30,
         max_num=30,
         validate_max=True,
+        can_delete=True,
     )
     RecipeStepFormSet = formset_factory(
         RecipeStepModelForm,
         formset=BaseRecipeStepFormSet,
         absolute_max=30,
         max_num=30,
-        validate_max=True
+        validate_max=True,
+        can_delete=True,
     )
 
     if request.method == 'POST':
@@ -56,16 +58,14 @@ def recipe_create_form(request: HttpRequest):
             recipe.save()
 
             for form in ingredient_formset:
-                if form.cleaned_data:
-                    ingredient = form.save(commit=False)
-                    ingredient.recipe = recipe
-                    ingredient.save()
+                ingredient = form.save(commit=False)
+                ingredient.recipe = recipe
+                ingredient.save()
 
             for form in step_formset:
-                if form.cleaned_data:
-                    step = form.save(commit=False)
-                    step.recipe = recipe
-                    step.save()
+                step = form.save(commit=False)
+                step.recipe = recipe
+                step.save()
 
             return HttpResponseRedirect(reverse('recipe-detail', kwargs={'slug': recipe.slug}))
     else:
@@ -90,19 +90,19 @@ def recipe_edit_form(request: HttpRequest, slug):
         RecipeIngredient,
         RecipeIngredientModelForm,
         formset=BaseRecipeIngredientModelFormSet,
-        exclude=['id', 'recipe'],
         absolute_max=30,
         max_num=30,
-        validate_max=True
+        validate_max=True,
+        can_delete=True,
     )
     RecipeStepFormSet = modelformset_factory(
         RecipeStep,
         RecipeStepModelForm,
         formset=BaseRecipeStepModelFormSet,
-        exclude=['id', 'recipe'],
         absolute_max=30,
         max_num=30,
-        validate_max=True
+        validate_max=True,
+        can_delete=True,
     )
     recipe = get_object_or_404(Recipe, slug=slug)
     ingredient_queryset = RecipeIngredient.objects.filter(recipe=recipe.id)
@@ -124,12 +124,22 @@ def recipe_edit_form(request: HttpRequest, slug):
             recipe.save()
 
             for form in ingredient_formset:
-                if form.cleaned_data:
-                    form.save()
+                instance = form.save(commit=False)
+                if not form.cleaned_data or form.cleaned_data.get('DELETE', False):
+                    if instance.id:
+                        instance.delete()
+                    continue
+                instance.recipe = recipe
+                instance.save()
 
             for form in step_formset:
-                if form.cleaned_data:
-                    form.save()
+                instance = form.save(commit=False)
+                if not form.cleaned_data or form.cleaned_data.get('DELETE', False):
+                    if instance.id:
+                        instance.delete()
+                    continue
+                instance.recipe = recipe
+                instance.save()
 
             return HttpResponseRedirect(reverse('recipe-detail', kwargs={'slug': recipe.slug}))
     else:
