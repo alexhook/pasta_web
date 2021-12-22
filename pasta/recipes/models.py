@@ -4,14 +4,14 @@ from django.urls import reverse
 from utils.func import unique_slugify
 
 class Cuisine(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, verbose_name='Кухня')
 
     def __str__(self):
         return self.name
 
 
 class Menu(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, verbose_name='Меню')
 
     def __str__(self):
         return self.name

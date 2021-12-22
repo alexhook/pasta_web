@@ -1,20 +1,8 @@
-class Test1:
-    a = 1
+a = {
+    'qw': 1,
+    'as': 2,
+}
 
-    def main():
-        print()
-    
-    def test():
-        print('test')
+a['qw'] = 3
 
-
-class Test2:
-    def main(self):
-        print(self.a)
-
-
-class NewTest(Test2, Test1):
-    pass
-
-NewTest().main()
-NewTest.test()
+print(a)

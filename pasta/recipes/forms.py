@@ -1,8 +1,10 @@
+from django import forms
 from django.forms import ModelForm
 from django.forms.formsets import BaseFormSet
 from django.forms.models import BaseModelFormSet
-from .models import Recipe, RecipeIngredient, RecipeStep, AmoutUnit
+from .models import Menu, Cuisine, Recipe, RecipeIngredient, RecipeStep, AmoutUnit
 from django.core.exceptions import ValidationError
+from utils.func import both
 
 class RecipeModelForm(ModelForm):
     class Meta:
@@ -10,10 +12,24 @@ class RecipeModelForm(ModelForm):
         fields = '__all__'
 
 
+class RecipeFilterForm(forms.Form):
+    menu = forms.ModelChoiceField(queryset=Menu.objects.all(), required=False, label='Меню', empty_label='')
+    cuisine = forms.ModelChoiceField(queryset=Cuisine.objects.all(), required=False, label='Кухня', empty_label='')
+
+
 class RecipeIngredientModelForm(ModelForm):
     class Meta:
         model = RecipeIngredient
-        fields = '__all__'
+        fields = ['ingredient', 'unit', 'amount', 'recipe']
+    
+    def clean_amount(self):
+        amount = self.cleaned_data['amount']
+        need_amount = self.cleaned_data['unit'].need_amount
+        if not both(need_amount, amount):
+            if amount:
+                return None
+            raise ValidationError('Укажите количество выбранных ингредиентов.')
+        return amount
 
 
 class RecipeStepModelForm(ModelForm):
@@ -22,52 +38,7 @@ class RecipeStepModelForm(ModelForm):
         fields = '__all__'
 
 
-class BaseRecipeIngredientFormSet(BaseFormSet):
-    def clean(self):
-        if any(self.errors):
-            return
-        
-        for form in self.deleted_forms:
-            self.forms.remove(form)
-
-        for form in self.forms:
-            if not form.cleaned_data:
-                self.forms.remove(form)
-        
-        if not self.forms:
-            raise ValidationError('Вы не указали ни одного ингредиента.')
-
-        ingredients = []
-        for form in self.forms:
-            ingredient = form.cleaned_data.get('ingredient')
-            if ingredient in ingredients:
-                raise ValidationError('Ингредиенты не должны повторяться.')
-            ingredients.append(ingredient)
-
-            if form.is_valid():
-                if form.cleaned_data['unit'].need_amount and not form.cleaned_data['amount']:
-                    raise ValidationError('Укажите количество выбранных ингредиентов.')
-
-
-class BaseRecipeStepFormSet(BaseFormSet):
-    def clean(self):
-        if any(self.errors):
-            return
-
-        for form in self.deleted_forms:
-            self.forms.remove(form)
-
-        for form in self.forms:
-            if not form.cleaned_data:
-                self.forms.remove(form)
-            else:
-                form.is_valid()
-
-        if not self.forms:
-            raise ValidationError('Укажите как минимум 1 шаг в рецепте.')
-
-
-class BaseRecipeIngredientModelFormSet(BaseModelFormSet):
+class RecipeIngredientCleanMixin:
     def clean(self):
         if any(self.errors):
             return
@@ -75,9 +46,6 @@ class BaseRecipeIngredientModelFormSet(BaseModelFormSet):
         ingredients = []
         deleted_forms = 0
         for form in self.forms:
-            print('--------------------------------------------')
-            print(form.cleaned_data)
-            print('--------------------------------------------')
             if form.cleaned_data.get('DELETE', False) or not form.cleaned_data:
                 deleted_forms += 1
                 continue
@@ -86,18 +54,56 @@ class BaseRecipeIngredientModelFormSet(BaseModelFormSet):
                 raise ValidationError('Ингредиенты не должны повторяться.')
             ingredients.append(ingredient)
 
-            if form.is_valid():
-                if form.cleaned_data['unit'].need_amount and not form.cleaned_data['amount']:
-                    raise ValidationError('Укажите количество выбранных ингредиентов.')
+            form.is_valid()
         
         if not self.forms or len(self.forms) == deleted_forms:
             raise ValidationError('Вы не указали ни одного ингредиента.')
 
 
-class BaseRecipeStepModelFormSet(BaseModelFormSet):
+class RecipeStepCleanMixin:
     def clean(self):
         if any(self.errors):
             return
 
-        if not self.forms:
+        deleted_forms = 0
+        for form in self.forms:
+            if form.cleaned_data.get('DELETE', False) or not form.cleaned_data:
+                deleted_forms += 1
+                continue
+            form.is_valid()
+
+        if not self.forms or len(self.forms) == deleted_forms:
             raise ValidationError('Укажите как минимум 1 шаг в рецепте.')
+
+
+class CleanAndSaveMixin:
+    def crean_and_save(self, **kwargs):
+        for form in self.forms:
+            instance = form.cleaned_data.get('id')
+            if not form.cleaned_data or form.cleaned_data.get('DELETE', False):
+                if instance:
+                    instance.delete()
+                continue
+            if not kwargs:
+                form.save()
+                continue
+            instance = form.save(commit=False)
+            for field, value in kwargs.items():
+                setattr(instance, field, value)
+            instance.save()
+        
+
+class BaseRecipeIngredientFormSet(RecipeIngredientCleanMixin, BaseFormSet, CleanAndSaveMixin):
+    pass
+
+
+class BaseRecipeStepFormSet(RecipeStepCleanMixin, BaseFormSet, CleanAndSaveMixin):
+    pass
+
+
+class BaseRecipeIngredientModelFormSet(RecipeIngredientCleanMixin, BaseModelFormSet, CleanAndSaveMixin):
+    pass
+
+
+class BaseRecipeStepModelFormSet(RecipeStepCleanMixin, BaseModelFormSet, CleanAndSaveMixin):
+    pass

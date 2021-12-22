@@ -1,10 +1,11 @@
+from django.http import request
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseRedirect
 from django.http.request import HttpRequest
 from django.urls import reverse, reverse_lazy
 from django.views import generic
-from .models import Recipe, RecipeIngredient, RecipeStep
-from .forms import RecipeModelForm, RecipeIngredientModelForm, RecipeStepModelForm, BaseRecipeIngredientFormSet, BaseRecipeStepFormSet, BaseRecipeIngredientModelFormSet, BaseRecipeStepModelFormSet
+from .models import Cuisine, Recipe, RecipeIngredient, RecipeStep
+from .forms import RecipeFilterForm, RecipeModelForm, RecipeIngredientModelForm, RecipeStepModelForm, BaseRecipeIngredientFormSet, BaseRecipeStepFormSet, BaseRecipeIngredientModelFormSet, BaseRecipeStepModelFormSet
 from django.forms import formset_factory, modelformset_factory
 from django.contrib.auth.decorators import login_required
 from django.views.generic.edit import DeleteView
@@ -12,9 +13,27 @@ from django.views.generic.edit import DeleteView
 
 class RecipeListView(generic.ListView):
     model = Recipe
+    paginate_by = 7
     
     def get_queryset(self):
-        return Recipe.objects.all().select_related('author__profile', 'menu', 'cuisine')
+        queryset = Recipe.objects.all().select_related('author__profile', 'menu', 'cuisine')
+        if self.request.GET:
+            form = RecipeFilterForm(self.request.GET)
+            if form.is_valid():
+                menu = form.cleaned_data.get('menu')
+                cuisine = form.cleaned_data.get('cuisine')
+                if menu:
+                    queryset = queryset.filter(menu=menu)
+                if cuisine:
+                    queryset = queryset.filter(cuisine=cuisine)
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        menu = self.request.GET.get('menu', 0)
+        cuisine = self.request.GET.get('cuisine', 0)
+        context_data['form'] = RecipeFilterForm(initial={'menu': menu, 'cuisine': cuisine})
+        return context_data
 
 
 class RecipeDetailView(generic.DetailView):
@@ -57,15 +76,8 @@ def recipe_create_form(request: HttpRequest):
                 recipe.is_published = 1
             recipe.save()
 
-            for form in ingredient_formset:
-                ingredient = form.save(commit=False)
-                ingredient.recipe = recipe
-                ingredient.save()
-
-            for form in step_formset:
-                step = form.save(commit=False)
-                step.recipe = recipe
-                step.save()
+            ingredient_formset.crean_and_save(recipe=recipe)
+            step_formset.crean_and_save(recipe=recipe)
 
             return HttpResponseRedirect(reverse('recipe-detail', kwargs={'slug': recipe.slug}))
     else:
@@ -123,23 +135,8 @@ def recipe_edit_form(request: HttpRequest, slug):
                 recipe.is_published = 0
             recipe.save()
 
-            for form in ingredient_formset:
-                instance = form.save(commit=False)
-                if not form.cleaned_data or form.cleaned_data.get('DELETE', False):
-                    if instance.id:
-                        instance.delete()
-                    continue
-                instance.recipe = recipe
-                instance.save()
-
-            for form in step_formset:
-                instance = form.save(commit=False)
-                if not form.cleaned_data or form.cleaned_data.get('DELETE', False):
-                    if instance.id:
-                        instance.delete()
-                    continue
-                instance.recipe = recipe
-                instance.save()
+            ingredient_formset.crean_and_save(recipe=recipe)
+            step_formset.crean_and_save(recipe=recipe)
 
             return HttpResponseRedirect(reverse('recipe-detail', kwargs={'slug': recipe.slug}))
     else:

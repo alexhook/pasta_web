@@ -26,6 +26,7 @@ urlpatterns = [
     path('recipes/', include('recipes.urls')),
     path('blog/', include('blog.urls')),
     path('wiki/', include('wiki.urls')),
+    path('search/', include('search.urls')),
 ]
 
 # Используйте static() чтобы добавить соотношения для статических файлов

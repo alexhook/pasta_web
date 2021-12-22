@@ -1,6 +1,13 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
+<div class="filter-form">
+    <form action="" method="get">
+        {{ form }}
+        <input type="submit" value="Показать">
+    </form>
+</div>
+{% if recipe_list %}
 {% for recipe in recipe_list %}
 <div class="recipe-list">
     <a href="{{ recipe.get_absolute_url }}">
@@ -22,4 +29,7 @@
     </ul>
 </div>
 {% endfor %}
+{% else %}
+<h3>Не найдено ни одного рецепта</h3>
+{% endif %}
 {% endblock %}

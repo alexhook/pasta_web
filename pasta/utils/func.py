@@ -17,3 +17,6 @@ def unique_slugify(instance, field='title', slug=None, queryset=None, l=settings
         a -= queryset
         slug += f'-{random.choice(list(a))}'
     return slug
+
+def both(arg1, arg2):
+    return True if (arg1 and arg2) or (not arg1 and not arg2) else False

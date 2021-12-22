@@ -19,10 +19,10 @@
         <li><a href="{% url 'blog' %}">БЛОГ</a></li>
         <li><a href="{% url 'wiki' %}">ВИКИ</a></li>
       </ul>
-      <div class="search">
-        <input type="text" name="" id="" placeholder="Search...">
+      <form class="search" action="{% url 'search' %}" method="get">
+        <input type="text" id="id_search" name="text" placeholder="Search...", maxlength="100">
         <i class="fa fa-search" aria-hidden="true"></i>
-      </div>
+      </form>
       <ul class="navigation usertools">
         <div>
           <li><a href="">Избранное</a></li>
@@ -42,6 +42,23 @@
   <div class="content-frame">
     <div class="content">
       {% block content %}{% endblock %}
+      {% block pagination %}
+      {% if is_paginated %}
+          <div class="pagination">
+              <span class="page-links">
+                  {% if page_obj.has_previous %}
+                      <a href="{{ request.path }}?page={{ page_obj.previous_page_number }}">пред.</a>
+                  {% endif %}
+                  <span class="page-current">
+                      Стр. {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}.
+                  </span>
+                  {% if page_obj.has_next %}
+                      <a href="{{ request.path }}?page={{ page_obj.next_page_number }}">след.</a>
+                  {% endif %}
+              </span>
+          </div>
+      {% endif %}
+      {% endblock %}
     </div>
   </div>
   {% block footer %}{% endblock %}

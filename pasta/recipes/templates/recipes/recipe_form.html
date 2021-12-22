@@ -74,6 +74,9 @@
             {{ form.description }}
             {{ form.DELETE.as_hidden }}
             <i class="fa fa-times delete-form" aria-hidden="true"></i>
+            {% if form.errors %}
+            <span class="errors">Заполните поля или удалите их.</span>
+            {% endif %}
         </div>
         {% endfor %}
     </div>

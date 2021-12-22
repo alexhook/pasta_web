@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'recipes.apps.RecipesConfig',
     'blog.apps.BlogConfig',
     'account.apps.AccountConfig',
+    'search.apps.SearchConfig',
     'debug_toolbar',
 ]
 
