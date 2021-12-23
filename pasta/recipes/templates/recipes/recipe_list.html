@@ -7,27 +7,10 @@
         <input type="submit" value="Показать">
     </form>
 </div>
+{% block search_info %}{% endblock %}
 {% if recipe_list %}
 {% for recipe in recipe_list %}
-<div class="recipe-list">
-    <a href="{{ recipe.get_absolute_url }}">
-        <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}" width="100" height="100">
-    </a>
-    <ul class="info">
-        <li class="types">
-            <ul>
-                <li class="menu">{{ recipe.menu.name }}</li>
-                <li class="cuisine">{{ recipe.cuisine.name }}</li>
-            </ul>
-        </li>
-        <li class="title"><a href="{{ recipe.get_absolute_url }}">{{ recipe.title }}</a></li>
-        <li class="time">{{ recipe.cooking_time }}</li>
-        <li class="author">
-            <img src="{{ recipe.author.profile.photo.url }}" alt="" width="50" height="50">
-            <div>{{ recipe.author.get_full_name }}</div>
-        </li>
-    </ul>
-</div>
+{% include './includes/recipe_preview_block.html' %}
 {% endfor %}
 {% else %}
 <h3>Не найдено ни одного рецепта</h3>

@@ -1,0 +1,52 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+{% include './includes/search_title_block.html' %}
+{% if recipe_list or ingredient_list or instrument_list %}
+{% if recipe_list %}
+<div class="recipe-list-wrapper">
+{% include './includes/search_header_block.html' with title='Рецепты' list=recipe_list %}
+<div class="recipe-list">
+    {% for recipe in recipe_list|slice:":5" %}
+    {% include 'recipes/includes/recipe_preview_block.html' %}
+    {% endfor %}
+    {% if recipe_list.count > 5 %}
+    <a href="{% url 'recipe-search' %}?text={{ text }}">Показать все</a>
+    {% endif %}
+</div>
+</div>
+{% endif %}
+
+{% if ingredient_list %}
+<div class="ingredient-list-wrapper">
+{% include './includes/search_header_block.html' with title='Ингредиенты' list=ingredient_list %}
+<div class="ingredient-list">
+    {% for ingredient in ingredient_list|slice:":5" %}
+    {% include 'wiki/includes/ingredient_preview_block.html' %}
+    {% endfor %}
+    {% if ingredient_list.count > 5 %}
+    <a href="{% url 'ingredient-search' %}?text={{ text }}">Показать все</a>
+    {% endif %}
+</div>
+</div>
+{% endif %}
+
+{% if instrument_list %}
+<div class="instrument-list-wrapper">
+{% include './includes/search_header_block.html' with title='Инструменты' list=instrument_list %}
+<div class="instrument-list">
+    {% for instrument in instrument_list|slice:":5" %}
+    {% include 'wiki/includes/instrument_preview_block.html' %}
+    {% endfor %}
+    {% if instrument_list.count > 5 %}
+    <a href="{% url 'instrument-search' %}?text={{ text }}">Показать все</a>
+    {% endif %}
+</div>
+</div>
+{% endif %}
+{% else %}
+<div class="search-not-found">
+    <h3>Ничего не найдено</h3>
+</div>
+{% endif %}
+{% endblock %}

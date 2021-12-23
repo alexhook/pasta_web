@@ -16,7 +16,7 @@ class RecipeListView(generic.ListView):
     paginate_by = 7
     
     def get_queryset(self):
-        queryset = Recipe.objects.all().select_related('author__profile', 'menu', 'cuisine')
+        queryset = Recipe.objects.filter(is_published=1).select_related('author__profile', 'menu', 'cuisine')
         if self.request.GET:
             form = RecipeFilterForm(self.request.GET)
             if form.is_valid():

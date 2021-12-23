@@ -1,0 +1,7 @@
+{% extends "recipes/recipe_list.html" %}
+
+{% block search_info %}
+{% include 'search/includes/search_title_block.html' %}
+{% include 'search/includes/search_header_block.html' with title='Рецепты' list=recipe_list %}
+{% endblock %}
+

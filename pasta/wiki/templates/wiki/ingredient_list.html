@@ -2,15 +2,6 @@
 
 {% block content %}
 {% for ingredient in ingredient_list %}
-{% with abs_url=ingredient.get_absolute_url name=ingredient.name %}
-<div>
-    <a href="{{ abs_url }}">
-        <img src="{{ ingredient.image.url }}" alt="{{ name }}" width="100" height="100">
-    </a>
-        <div>
-            <a href="{{ abs_url }}">{{ name }}</a>
-        </div>
-</div>
-{% endwith %}
+{% include './includes/ingredient_preview_block.html' %}
 {% endfor %}
 {% endblock %}

@@ -7,7 +7,7 @@ def unique_slugify(instance, field='title', slug=None, queryset=None, l=settings
         slug = slugify(getattr(instance, field))
     if not queryset:
         queryset = instance.__class__.objects.filter(slug__regex=rf'^{slug}(-\d+)?$')
-        if not [x for x in queryset if x.slug == slug]:
+        if not queryset.filter(slug=slug).exists():
             return slug
         queryset = set(x.slug.replace(f'{slug}-', '') for x in queryset)
     if len([x for x in queryset if len(x) == l]) == 10**l:
@@ -19,4 +19,4 @@ def unique_slugify(instance, field='title', slug=None, queryset=None, l=settings
     return slug
 
 def both(arg1, arg2):
-    return True if (arg1 and arg2) or (not arg1 and not arg2) else False
+    return (arg1 and arg2) or (not arg1 and not arg2)
