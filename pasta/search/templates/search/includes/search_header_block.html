@@ -1,1 +1,1 @@
-<h3>{{ title }} | Найдено: {{ list.count }}</h3>
+{% if list %}<h3>{{ title }} | Найдено: {% if is_paginated %}{{ page_obj.paginator.count }}{% else %}{{ list.count }}{% endif %}</h3>{% endif %}

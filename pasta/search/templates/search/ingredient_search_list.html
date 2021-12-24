@@ -1,25 +1,18 @@
-{% extends "recipes/recipe_list.html" %}
+{% extends "wiki/ingredient_list.html" %}
 
 {% block navigation_button %}
 <a href="{% url 'search' %}?text={{ text|urlencode }}"><i class="fa fa-arrow-left" aria-hidden="true"></i></a>
-{% endblock %}
+{% endblock navigation_button %}
 
 {% block search_form %}
     {% include './includes/search_box_block.html'%}
 {% endblock search_form %}
 
-{% if text %}
-{% block add_filter_fields %}
-<input type="hidden" name="text" value="{{ text }}">
-{% endblock add_filter_fields %}
-{% endif %}
-
 {% block search_info %}
 {% include 'search/includes/search_title_block.html' %}
-{% include 'search/includes/search_header_block.html' with title='Рецепты' list=recipe_list %}
+{% include 'search/includes/search_header_block.html' with title='Ингредиенты' list=ingredient_list %}
 {% endblock %}
 
 {% block pagination_page_links %}
-{% include './includes/pagination_block.html'%}
+{% include './includes/pagination_block.html' %}
 {% endblock pagination_page_links %}
-

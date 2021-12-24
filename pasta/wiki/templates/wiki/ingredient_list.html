@@ -1,7 +1,11 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
+{% block navigation_button %}{% endblock navigation_button %}
+{% block search_info %}{% endblock search_info %}
 {% for ingredient in ingredient_list %}
 {% include './includes/ingredient_preview_block.html' %}
+{% empty %}
+<h3>Не найдено ни одного ингредиента</h3>
 {% endfor %}
 {% endblock %}

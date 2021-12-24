@@ -13,7 +13,7 @@ from django.views.generic.edit import DeleteView
 
 class RecipeListView(generic.ListView):
     model = Recipe
-    paginate_by = 7
+    paginate_by = 10
     
     def get_queryset(self):
         queryset = Recipe.objects.filter(is_published=1).select_related('author__profile', 'menu', 'cuisine')

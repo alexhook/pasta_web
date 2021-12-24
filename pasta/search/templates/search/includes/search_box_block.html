@@ -1,0 +1,10 @@
+<form class="search" action="{% if 'search' in request.path %}{% else %}{% url 'search' %}{% endif %}" method="get">
+    {% if menu %}
+    <input type="hidden" name="menu" value="{{ menu }}">
+    {% endif %}
+    {% if cuisine %}
+    <input type="hidden" name="cuisine" value="{{ cuisine }}">
+    {% endif %}
+    <input type="text" id="id_search" name="text" placeholder="Поиск рецептов, ингредиентов, инструментов..." maxlength="100" {% if text %}value="{{ text }}"{% endif %}>
+    <i class="fa fa-search" aria-hidden="true"></i>
+</form>

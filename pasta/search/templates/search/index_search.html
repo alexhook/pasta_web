@@ -1,5 +1,9 @@
 {% extends "base_generic.html" %}
 
+{% block search_form %}
+    {% include './includes/search_box_block.html' %}
+{% endblock search_form %}
+
 {% block content %}
 {% include './includes/search_title_block.html' %}
 {% if recipe_list or ingredient_list or instrument_list %}
@@ -11,7 +15,7 @@
     {% include 'recipes/includes/recipe_preview_block.html' %}
     {% endfor %}
     {% if recipe_list.count > 5 %}
-    <a href="{% url 'recipe-search' %}?text={{ text }}">Показать все</a>
+    <a href="{% url 'recipe-search' %}?text={{ text|urlencode }}">Показать все</a>
     {% endif %}
 </div>
 </div>
@@ -25,7 +29,7 @@
     {% include 'wiki/includes/ingredient_preview_block.html' %}
     {% endfor %}
     {% if ingredient_list.count > 5 %}
-    <a href="{% url 'ingredient-search' %}?text={{ text }}">Показать все</a>
+    <a href="{% url 'ingredient-search' %}?text={{ text|urlencode }}">Показать все</a>
     {% endif %}
 </div>
 </div>
@@ -39,7 +43,7 @@
     {% include 'wiki/includes/instrument_preview_block.html' %}
     {% endfor %}
     {% if instrument_list.count > 5 %}
-    <a href="{% url 'instrument-search' %}?text={{ text }}">Показать все</a>
+    <a href="{% url 'instrument-search' %}?text={{ text|urlencode }}">Показать все</a>
     {% endif %}
 </div>
 </div>

@@ -10,7 +10,7 @@ class IngredientGroup(models.Model):
         return self.name
     
     def get_absolute_url(self):
-        return reverse('group-ingredients-list', kwargs={'group':self.slug})
+        return reverse('group-ingredients-list', kwargs={'group_slug':self.slug})
 
 
 class Ingredient(models.Model):
@@ -24,7 +24,7 @@ class Ingredient(models.Model):
         return self.name
     
     def get_absolute_url(self):
-        return reverse('ingredient-detail', kwargs={'group': self.group.slug, 'slug':self.slug})
+        return reverse('ingredient-detail', kwargs={'group_slug': self.group.slug, 'slug':self.slug})
 
 
 class Instrument(models.Model):

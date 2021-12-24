@@ -1,7 +1,11 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
+{% block navigation_button %}{% endblock navigation_button %}
+{% block search_info %}{% endblock search_info %}
 {% for instrument in instrument_list %}
 {% include './includes/instrument_preview_block.html' %}
+{% empty %}
+<h3>Не найдено ни одного инструмента</h3>
 {% endfor %}
 {% endblock %}

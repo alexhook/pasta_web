@@ -1,0 +1,24 @@
+<span class="page-links">
+    {% if page_obj.has_previous %}
+    {% if "page" in request.get_full_path %}
+        {% with l=page|stringformat:"s"|length|stringformat:"s" %}{% with s=":-"|add:l %}
+        <a href="{{ request.get_full_path|slice:s }}{{ page_obj.previous_page_number }}">пред.</a>
+        {% endwith %}{% endwith %}
+    {% else %}
+        <a href="{{ request.get_full_path }}&page={{ page_obj.previous_page_number }}">пред.</a>
+    {% endif %}
+    {% endif %}
+    <span class="page-current">
+        Стр. {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}.
+    </span>
+    {% if page_obj.has_next %}
+    {% if "page" in request.get_full_path %}
+        {% with l=page|stringformat:"s"|length|stringformat:"s" %}{% with s=":-"|add:l %}
+        <a href="{{ request.get_full_path|slice:s }}{{ page_obj.next_page_number }}">след.</a>
+        {% endwith %}{% endwith %}
+    {% else %}
+        <a href="{{ request.get_full_path }}&page={{ page_obj.next_page_number }}">след.</a>
+    {% endif %}
+    {% endif %}
+</span>
+

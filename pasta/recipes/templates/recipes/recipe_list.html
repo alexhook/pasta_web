@@ -1,9 +1,11 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
+{% block navigation_button %}{% endblock %}
 <div class="filter-form">
     <form action="" method="get">
         {{ form }}
+        {% block add_filter_fields %}{% endblock add_filter_fields %}
         <input type="submit" value="Показать">
     </form>
 </div>

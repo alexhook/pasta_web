@@ -14,28 +14,32 @@ def index(request: HttpRequest):
 
 class IngredientGroupListView(generic.ListView):
     model = IngredientGroup
+    paginate_by = 15
 
 
 class IngredientListView(generic.ListView):
     model = Ingredient
+    ordering = ['name']
+    paginate_by = 15
     
     def get_queryset(self):
-        print(self.kwargs)
-        self.group = get_object_or_404(IngredientGroup, slug=self.kwargs['group'])
-        return Ingredient.objects.filter(group__slug=self.group.slug).order_by('name')
+        queryset = Ingredient.objects.filter(group__slug=self.kwargs['group_slug'])
+        if not queryset:
+            raise Http404
+        return queryset
 
 
 class IngredientDetailView(generic.DetailView):
     model = Ingredient
 
     def get_object(self):
-        self.group = get_object_or_404(IngredientGroup, slug=self.kwargs['group'])
-        return get_object_or_404(Ingredient, group=self.group, slug=self.kwargs['slug'])
+        return get_object_or_404(Ingredient, group__slug=self.kwargs['group_slug'], slug=self.kwargs['slug'])
 
 
 class InstrumentListView(generic.ListView):
     model = Instrument
     ordering = ['name']
+    paginate_by = 15
 
 
 class InstrumentDetailView(generic.DetailView):
