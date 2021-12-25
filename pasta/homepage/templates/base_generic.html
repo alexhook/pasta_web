@@ -16,13 +16,13 @@
       </a>
       <ul class="navigation applinks">
         <li><a href="{% url 'recipe-list' %}">РЕЦЕПТЫ</a></li>
-        <li><a href="{% url 'blog' %}">БЛОГ</a></li>
         <li><a href="{% url 'wiki' %}">ВИКИ</a></li>
       </ul>
       {% block search_form %}
       {% include 'search/includes/search_box_block.html' %}
       {% endblock search_form %}
       <ul class="navigation usertools">
+        {% if user.is_authenticated %}
         <div>
           <li><a href="">Избранное</a></li>
           <!-- <i class="fa fa-bookmark" aria-hidden="true"></i> -->
@@ -32,9 +32,17 @@
           <!-- <i class="fa fa-plus" aria-hidden="true"></i> -->
         </div>
         <div>
-          <li><a href="">Войти</a></li>
+          <li><a href="">Личный кабинет</a></li>
+        </div>
+        <div>
+          <li><a href="{% url 'logout' %}"><i class="fa fa-times" aria-hidden="true"></i></a></li>
+        </div>
+        {% else %}
+        <div>
+          <li><a href="{% url 'login' %}">Войти</a></li>
           <!-- <i class="fa fa-user-o" aria-hidden="true"></i> -->
         </div>
+        {% endif %}
       </ul>
   </header>
   {% endblock header %}
