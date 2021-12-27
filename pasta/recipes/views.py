@@ -1,10 +1,9 @@
-from django.http import request
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseRedirect
 from django.http.request import HttpRequest
 from django.urls import reverse, reverse_lazy
 from django.views import generic
-from .models import Cuisine, Recipe, RecipeIngredient, RecipeStep
+from .models import Recipe, RecipeIngredient, RecipeStep
 from .forms import RecipeFilterForm, RecipeModelForm, RecipeIngredientModelForm, RecipeStepModelForm, BaseRecipeIngredientFormSet, BaseRecipeStepFormSet, BaseRecipeIngredientModelFormSet, BaseRecipeStepModelFormSet
 from django.forms import formset_factory, modelformset_factory
 from django.contrib.auth.decorators import login_required

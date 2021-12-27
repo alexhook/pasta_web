@@ -2,7 +2,7 @@ from django import forms
 from django.forms import ModelForm
 from django.forms.formsets import BaseFormSet
 from django.forms.models import BaseModelFormSet
-from .models import Menu, Cuisine, Recipe, RecipeIngredient, RecipeStep, AmoutUnit
+from .models import Menu, Cuisine, Recipe, RecipeIngredient, RecipeStep
 from django.core.exceptions import ValidationError
 from utils.func import both
 

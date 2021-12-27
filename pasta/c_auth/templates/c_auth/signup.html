@@ -1,0 +1,16 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h2>Регистрация</h2>
+  <form method="post" action="">
+    {% csrf_token %}
+      {% for field in form %}
+        <p>{{ field.label_tag }}<br>
+        {{ field }}</p>
+        {% for error in field.errors %}
+            <p>{{ error }}</p>
+        {% endfor %}
+      {% endfor %}
+      <input type="submit" value="Регистрация">
+  </form>
+{% endblock %}

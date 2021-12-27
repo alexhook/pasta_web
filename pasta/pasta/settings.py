@@ -41,8 +41,8 @@ INSTALLED_APPS = [
     'wiki.apps.WikiConfig',
     'homepage.apps.HomepageConfig',
     'recipes.apps.RecipesConfig',
-    'profile.apps.ProfileConfig',
     'search.apps.SearchConfig',
+    'c_auth.apps.CustomAuthConfig',
     # 'debug_toolbar',
 ]
 
@@ -152,3 +152,5 @@ EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+AUTH_USER_MODEL = 'c_auth.User'

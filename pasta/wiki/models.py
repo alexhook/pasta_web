@@ -6,6 +6,10 @@ class IngredientGroup(models.Model):
     slug = models.SlugField(null=False, unique=True)
     image = models.ImageField(upload_to='wiki/ingredientgroups/')
 
+    class Meta:
+        verbose_name = 'Группа ингредиентов'
+        verbose_name_plural = 'Группы ингредиентов'
+
     def __str__(self):
         return self.name
     
@@ -19,6 +23,10 @@ class Ingredient(models.Model):
     group = models.ForeignKey('IngredientGroup', on_delete=models.SET_NULL, null=True)
     description = models.TextField()
     image = models.ImageField(upload_to='wiki/ingredients/')
+
+    class Meta:
+        verbose_name = 'Ингредиент'
+        verbose_name_plural = 'Ингредиенты'
     
     def __str__(self):
         return self.name
@@ -32,6 +40,10 @@ class Instrument(models.Model):
     slug = models.SlugField(null=False, unique=True)
     description = models.TextField()
     image = models.ImageField(upload_to='wiki/instruments/')
+
+    class Meta:
+        verbose_name = 'Инструмент'
+        verbose_name_plural = 'Инструменты'
 
     def __str__(self):
         return self.name
