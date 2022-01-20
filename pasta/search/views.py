@@ -14,7 +14,7 @@ def index(request: HttpRequest):
     if form.is_valid():
         text = form.cleaned_data.get('text', '').strip()
         if text:
-            recipe_list = Recipe.objects.filter(is_published=1, title__iregex=rf'{text}').select_related('author__profile', 'menu', 'cuisine')
+            recipe_list = Recipe.objects.filter(is_published=1, title__iregex=rf'{text}').select_related('author', 'menu', 'cuisine')
             ingredient_list = Ingredient.objects.filter(name__iregex=rf'{text}').select_related('group')
             instrument_list = Instrument.objects.filter(name__iregex=rf'{text}')
     return render(

@@ -15,16 +15,17 @@ class RecipeListView(generic.ListView):
     paginate_by = 10
     
     def get_queryset(self):
-        queryset = Recipe.objects.filter(is_published=1).select_related('author__profile', 'menu', 'cuisine')
-        if self.request.GET:
-            form = RecipeFilterForm(self.request.GET)
-            if form.is_valid():
-                menu = form.cleaned_data.get('menu')
-                cuisine = form.cleaned_data.get('cuisine')
-                if menu:
-                    queryset = queryset.filter(menu=menu)
-                if cuisine:
-                    queryset = queryset.filter(cuisine=cuisine)
+        queryset = Recipe.objects.filter(is_published=1).select_related('author', 'menu', 'cuisine')
+        if queryset.exists():
+            if self.request.GET:
+                form = RecipeFilterForm(self.request.GET)
+                if form.is_valid():
+                    menu = form.cleaned_data.get('menu')
+                    cuisine = form.cleaned_data.get('cuisine')
+                    if menu:
+                        queryset = queryset.filter(menu=menu)
+                    if cuisine:
+                        queryset = queryset.filter(cuisine=cuisine)
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -39,10 +40,10 @@ class RecipeDetailView(generic.DetailView):
     model = Recipe
 
     def get_object(self):
-        return Recipe.objects.select_related('cuisine', 'menu', 'author__profile').prefetch_related('recipeingredient_set__ingredient', 'recipeingredient_set__unit','recipestep_set').get(slug=self.kwargs['slug'])
+        return Recipe.objects.select_related('cuisine', 'menu', 'author').prefetch_related('recipeingredient_set__ingredient', 'recipeingredient_set__unit','recipestep_set').get(slug=self.kwargs['slug'])
 
 
-@login_required(login_url='/admin/')
+@login_required
 def recipe_create_form(request: HttpRequest):
     RecipeIngredientFormSet = formset_factory(
         RecipeIngredientModelForm,
@@ -95,7 +96,7 @@ def recipe_create_form(request: HttpRequest):
     )
 
 
-@login_required(login_url='/admin/')
+@login_required
 def recipe_edit_form(request: HttpRequest, slug):
     RecipeIngredientFormSet = modelformset_factory(
         RecipeIngredient,

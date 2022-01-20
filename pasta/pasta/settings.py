@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'homepage.apps.HomepageConfig',
     'recipes.apps.RecipesConfig',
     'search.apps.SearchConfig',
-    'c_auth.apps.CustomAuthConfig',
+    'accounts.apps.AccountsConfig',
     # 'debug_toolbar',
 ]
 
@@ -153,4 +153,4 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
-AUTH_USER_MODEL = 'c_auth.User'
+AUTH_USER_MODEL = 'accounts.User'

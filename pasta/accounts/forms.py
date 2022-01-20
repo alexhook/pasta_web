@@ -1,7 +1,8 @@
 from django import forms
-from .models import User
+from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.core.exceptions import ValidationError
+from recipes.forms import RecipeFilterForm
 
 
 class UserCreationForm(forms.ModelForm):
@@ -11,7 +12,7 @@ class UserCreationForm(forms.ModelForm):
     password2 = forms.CharField(label='Подтверждение пароля', widget=forms.PasswordInput)
 
     class Meta:
-        model = User
+        model = get_user_model()
         fields = ('email', )
 
     def clean_password2(self):
@@ -39,5 +40,24 @@ class UserChangeForm(forms.ModelForm):
     password = ReadOnlyPasswordHashField()
 
     class Meta:
-        model = User
+        model = get_user_model()
         fields = ('email', 'password', 'is_active', 'is_admin')
+
+
+class ChangeUserPersonalInfoModelForm(forms.ModelForm):
+    class Meta:
+        model = get_user_model()
+        fields = ('first_name', 'last_name', 'photo',)
+
+
+class MyRecipesFilterForm(RecipeFilterForm):
+    is_published = forms.ChoiceField(
+        choices=(
+            ('', 'Все'),
+            ('1', 'Опубликованные'), 
+            ('0', 'Сохраненные'),
+        ), 
+        required=False, 
+        label='Публикация', 
+        initial=1
+    )

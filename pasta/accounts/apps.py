@@ -1,7 +1,7 @@
 from django.apps import AppConfig
 
 
-class CustomAuthConfig(AppConfig):
+class AccountsConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'c_auth'
+    name = 'accounts'
     verbose_name = 'Аутентификация и авторизация'

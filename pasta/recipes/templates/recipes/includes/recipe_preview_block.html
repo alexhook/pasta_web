@@ -12,7 +12,7 @@
         <li class="title"><a href="{{ recipe.get_absolute_url }}">{{ recipe.title }}</a></li>
         <li class="time">{{ recipe.cooking_time }}</li>
         <li class="author">
-            <img src="{{ recipe.author.profile.photo.url }}" alt="" width="50" height="50">
+            <img src="{{ recipe.author.photo.url }}" alt="" width="50" height="50">
             <div>{{ recipe.author.get_full_name }}</div>
         </li>
     </ul>

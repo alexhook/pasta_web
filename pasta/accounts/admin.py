@@ -16,9 +16,9 @@ class UserAdmin(BaseUserAdmin):
     list_filter = ('is_active', 'is_admin', 'is_superuser',)
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
-        ('Personal info', {'fields': ('first_name', 'last_name', 'photo',)}),
-        ('Permissions', {'fields': ('is_active', 'is_admin', 'is_superuser', 'groups', 'user_permissions')}),
-        ('Important dates', {'fields': ('last_login', 'date_joined')}),
+        ('Персональная информация', {'fields': ('first_name', 'last_name', 'photo',)}),
+        ('Разрешения', {'fields': ('is_active', 'is_admin', 'is_superuser', 'groups', 'user_permissions')}),
+        ('Даты', {'fields': ('last_login', 'date_joined')}),
     )
     # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
     # overrides get_fieldsets to use this attribute when creating a user.
@@ -30,8 +30,8 @@ class UserAdmin(BaseUserAdmin):
     )
     search_fields = ('email', 'first_name', 'last_name')
     ordering = ('email',)
-    filter_horizontal = ()
+    filter_horizontal = ('groups', 'user_permissions',)
 
 
 admin.site.register(User, UserAdmin)
-admin.site.unregister(Group)
+# admin.site.unregister(Group)

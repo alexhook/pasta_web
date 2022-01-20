@@ -36,14 +36,15 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    email = models.EmailField('Адрес электронной почты', max_length=255, unique=True)
-    first_name = models.CharField('Имя', max_length=150, blank=True)
-    last_name = models.CharField('Фамилия', max_length=150, blank=True)
-    photo = models.ImageField('Фото', upload_to='users/', blank=True)
-    date_joined = models.DateTimeField('Дата регистрации', default=timezone.now)
+    email = models.EmailField('адрес электронной почты', max_length=255, unique=True)
+    first_name = models.CharField('имя', max_length=150, null=True, blank=False)
+    last_name = models.CharField('фамилия', max_length=150, null=True, blank=False)
+    photo = models.ImageField('фото', upload_to='users/', null=True, blank=False)
+    favorites = models.ManyToManyField('recipes.Recipe')
+    date_joined = models.DateTimeField('дата регистрации', default=timezone.now)
 
-    is_active = models.BooleanField('Активный', default=False)
-    is_admin = models.BooleanField('Администратор', default=False)
+    is_active = models.BooleanField('активный', default=False, help_text='Только активные пользователи могут проходить авторизацию.')
+    is_admin = models.BooleanField('администратор', default=False, help_text='Дает право доступа к панели администратора.')
 
     objects = UserManager()
 
@@ -52,8 +53,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = []
 
     class Meta:
-        verbose_name = 'Пользователь'
-        verbose_name_plural = 'Пользователи'
+        verbose_name = 'пользователь'
+        verbose_name_plural = 'пользователи'
 
     def __str__(self):
         return self.email
@@ -85,7 +86,8 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 class ActivationMessage(SimpleTemplateResponse):
     def __init__(self, msg: str, **kwargs):
-        super().__init__('c_auth/activation_msg.html', **kwargs)
+        template = 'accounts/activation_message.html'
+        super().__init__(template, **kwargs)
         self.context_data = {
             'msg': msg, 
         }

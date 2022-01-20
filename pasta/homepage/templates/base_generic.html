@@ -24,6 +24,10 @@
       <ul class="navigation usertools">
         {% if user.is_authenticated %}
         <div>
+          <li><a href="/admin/">Админ</a></li>
+          <!-- <i class="fa fa-bookmark" aria-hidden="true"></i> -->
+        </div>
+        <div>
           <li><a href="">Избранное</a></li>
           <!-- <i class="fa fa-bookmark" aria-hidden="true"></i> -->
         </div>
@@ -32,7 +36,7 @@
           <!-- <i class="fa fa-plus" aria-hidden="true"></i> -->
         </div>
         <div>
-          <li><a href="">Личный кабинет</a></li>
+          <li><a href="{% url 'profile-info-change' %}">Личный кабинет</a></li>
         </div>
         <div>
           <li><a href="{% url 'logout' %}"><i class="fa fa-times" aria-hidden="true"></i></a></li>
@@ -48,6 +52,17 @@
   {% endblock header %}
   <div class="content-frame">
     <div class="content">
+      {% block messages %}
+      {% if messages %}
+      <ul class="messages">
+          {% for message in messages %}
+          <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+              {{ message }}
+          </li>
+          {% endfor %}
+      </ul>
+      {% endif %}
+      {% endblock %}
       {% block content %}{% endblock %}
       {% block pagination %}
       {% if is_paginated %}
