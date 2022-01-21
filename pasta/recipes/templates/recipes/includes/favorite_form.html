@@ -1,0 +1,4 @@
+<form class="favorite-update-form" action="{% url 'favorites-update' recipe.slug %}" method="post">
+    {% csrf_token %}
+    <button type="submit"><i class="far fa-bookmark{% if recipe in favorites %} favorite{% endif %}" type="submit"></i></button>
+</form>

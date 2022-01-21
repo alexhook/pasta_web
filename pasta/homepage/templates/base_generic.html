@@ -7,6 +7,7 @@
   {% load static %}
   <link rel="stylesheet" href="{% static 'css/styles.css' %}">
   <link rel="stylesheet" href="{% static 'font_awesome/css/all.css' %}">
+  {% block header_scripts %}{% endblock %}
 </head>
 <body>
   {% block header %}
@@ -28,7 +29,7 @@
           <!-- <i class="fa fa-bookmark" aria-hidden="true"></i> -->
         </div>
         <div>
-          <li><a href="">Избранное</a></li>
+          <li><a href="{% url 'favorites' %}">Избранное</a></li>
           <!-- <i class="fa fa-bookmark" aria-hidden="true"></i> -->
         </div>
         <div>
@@ -36,7 +37,7 @@
           <!-- <i class="fa fa-plus" aria-hidden="true"></i> -->
         </div>
         <div>
-          <li><a href="{% url 'profile-info-change' %}">Личный кабинет</a></li>
+          <li><a href="{% url 'profile-index' %}">Личный кабинет</a></li>
         </div>
         <div>
           <li><a href="{% url 'logout' %}"><i class="fa fa-times" aria-hidden="true"></i></a></li>
@@ -86,6 +87,6 @@
     </div>
   </div>
   {% block footer %}{% endblock %}
+  {% block footer_scripts %}{% endblock %}
 </body>
-{% block scripts %}{% endblock %}
 </html>

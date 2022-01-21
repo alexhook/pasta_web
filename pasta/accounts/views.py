@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from .forms import UserCreationForm, ChangeUserPersonalInfoModelForm
 from .models import ActivationMessage
-from django.http import HttpRequest
+from django.http import Http404, HttpRequest, JsonResponse
 from django.contrib.auth import get_user_model, update_session_auth_hash
 from django.shortcuts import render
 from .tokens import account_activation_token
@@ -15,7 +15,14 @@ from recipes.views import RecipeListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from recipes.models import Recipe
 from .forms import MyRecipesFilterForm
+from utils.func import is_ajax
 
+
+def index(request: HttpRequest):
+    return render(
+        request,
+        'accounts/profile_index.html',
+    )
 
 def signup(request: HttpRequest):
     if request.method == 'POST':
@@ -131,3 +138,23 @@ class MyRecipesListView(LoginRequiredMixin, RecipeListView):
             },
         )
         return context_data
+
+@login_required
+def favorites_update(request: HttpRequest, slug):
+    if request.method == 'POST' and is_ajax(request):
+        recipe = Recipe.objects.filter(slug=slug)
+        if not recipe.exists():
+            error = 'Рецепт не найден.'
+            return JsonResponse({'errors': error}, status=400)
+        recipe = recipe[0]
+        if recipe.author == request.user:
+            error = 'Невозможно добавить собственный рецепт в избранное.'
+            return JsonResponse({'errors': error}, status=400)
+        favorites = request.user.favorites
+        if favorites.filter(slug=slug).exists():
+            favorites.remove(recipe)
+        else:
+            favorites.add(recipe)
+        return JsonResponse({}, status=200)
+    else:
+        raise Http404

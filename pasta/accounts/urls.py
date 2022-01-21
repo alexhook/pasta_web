@@ -11,8 +11,10 @@ urlpatterns = [
     path('reset/done/', auth_views.PasswordResetCompleteView.as_view(), name='password-reset-complete'),
     path('signup/', views.signup, name='signup'),
     path('activate/<uidb64>/<token>/', views.activate, name='activate-account'),
-    path('profile/change_personal_info/', views.change_user_personal_info, name='profile-info-change'),
+    path('profile/', views.index, name='profile-index'),
+    path('profile/change_personal_info/', views.change_user_personal_info, name='change-personal-info'),
     path('profile/password_change/', views.password_change, name='password-change'),
-    path('profile/favorites/', views.FavoritesListView.as_view(), name='profile-favorites'),
-    path('profile/myrecipes/', views.MyRecipesListView.as_view(), name='profile-myrecipes'),
+    path('profile/myrecipes/', views.MyRecipesListView.as_view(), name='myrecipes'),
+    path('profile/favorites/', views.FavoritesListView.as_view(), name='favorites'),
+    path('profile/favorites/update/<slug:slug>/', views.favorites_update, name='favorites-update'),
 ]

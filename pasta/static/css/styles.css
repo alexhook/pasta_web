@@ -115,3 +115,7 @@ header .usertools li a
     width: 95%;
     background-color: #ffffff;
 }
+.favorite-update-form i.favorite
+{
+    color: red;
+}

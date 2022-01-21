@@ -7,6 +7,11 @@
             <ul>
                 <li class="menu">{{ recipe.menu.name }}</li>
                 <li class="cuisine">{{ recipe.cuisine.name }}</li>
+                {% if not recipe.author == user %}
+                <li>
+                    {% include './favorite_form.html' %}
+                </li>
+                {% endif %}
             </ul>
         </li>
         <li class="title"><a href="{{ recipe.get_absolute_url }}">{{ recipe.title }}</a></li>

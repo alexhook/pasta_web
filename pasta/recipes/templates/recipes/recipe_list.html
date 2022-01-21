@@ -12,10 +12,15 @@
 </div>
 {% block search_info %}{% endblock %}
 {% if recipe_list %}
+{% with favorites=user.favorites.all %}
 {% for recipe in recipe_list %}
 {% include './includes/recipe_preview_block.html' %}
 {% endfor %}
+{% endwith %}
 {% else %}
 <h3>Не найдено ни одного рецепта</h3>
 {% endif %}
+{% endblock %}
+{% block footer_scripts %}
+{% include './includes/favorite_script.html' %}
 {% endblock %}

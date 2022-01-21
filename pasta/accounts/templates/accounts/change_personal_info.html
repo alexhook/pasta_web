@@ -1,6 +1,9 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
+{% block sidebar %}
+{% include "./includes/sidebar.html" %}
+{% endblock %}
 <form action="" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <div>

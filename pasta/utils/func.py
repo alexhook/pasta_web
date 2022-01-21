@@ -1,3 +1,4 @@
+from django.http import HttpRequest
 from pytils.translit import slugify
 from django.conf import settings 
 import random
@@ -20,3 +21,6 @@ def unique_slugify(instance, field='title', slug=None, queryset=None, l=settings
 
 def both(arg1, arg2):
     return (arg1 and arg2) or (not arg1 and not arg2)
+
+def is_ajax(request: HttpRequest):
+    return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
