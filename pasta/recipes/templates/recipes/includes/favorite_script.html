@@ -12,14 +12,17 @@
                 dataType: "json",
                 success: function(response) {
                     let i = form.find("i").first()
-                    if (i.hasClass("favorite")) {
-                        i.removeClass("favorite")
+                    let span = form.find("span").first()
+                    let favoritesClassName = 'favorite'
+                    if (i.hasClass(favoritesClassName)) {
+                        i.removeClass(favoritesClassName)
                     } else {
-                        i.addClass("favorite")
+                        i.addClass(favoritesClassName)
                     }
+                    span.text(response.favorites_label)
                 },
                 error: function(response) {
-                    console.log(response.responseJSON.errors)
+                    alert(response.responseJSON.errors)
                 }
             })
         })

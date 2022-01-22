@@ -41,14 +41,14 @@ class RecipeSearchListView(RecipeListView):
         return queryset.filter(title__iregex=rf'{text}')
     
     def get_context_data(self, **kwargs):
-        data = super().get_context_data(**kwargs)
-        data['text'] = self.request.GET.get('text', '').strip()
-        data['menu'] = self.request.GET.get('menu', '')
-        data['cuisine'] = self.request.GET.get('cuisine', '')
+        context_data = super().get_context_data(**kwargs)
+        context_data['text'] = self.request.GET.get('text', '').strip()
+        context_data['menu'] = self.request.GET.get('menu', '')
+        context_data['cuisine'] = self.request.GET.get('cuisine', '')
         page = self.request.GET.get('page')
         if page:
-            data['page'] = page
-        return data
+            context_data['page'] = page
+        return context_data
 
 
 class IngredientSearchListView(IngredientListView):
@@ -62,12 +62,12 @@ class IngredientSearchListView(IngredientListView):
         return queryset
     
     def get_context_data(self, **kwargs):
-        data = super().get_context_data(**kwargs)
-        data['text'] = self.request.GET.get('text', '').strip()
+        context_data = super().get_context_data(**kwargs)
+        context_data['text'] = self.request.GET.get('text', '').strip()
         page = self.request.GET.get('page')
         if page:
-            data['page'] = page
-        return data
+            context_data['page'] = page
+        return context_data
 
 
 class InstrumentSearchListView(InstrumentListView):
@@ -81,9 +81,9 @@ class InstrumentSearchListView(InstrumentListView):
         return queryset
     
     def get_context_data(self, **kwargs):
-        data = super().get_context_data(**kwargs)
-        data['text'] = self.request.GET.get('text', '').strip()
+        context_data = super().get_context_data(**kwargs)
+        context_data['text'] = self.request.GET.get('text', '').strip()
         page = self.request.GET.get('page')
         if page:
-            data['page'] = page
-        return data
+            context_data['page'] = page
+        return context_data

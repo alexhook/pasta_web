@@ -12,6 +12,9 @@
         <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}" width="250" height="250">
         <span class="menu">{{ recipe.menu.name }}</span>
         <span class="cuisine">{{ recipe.cuisine.name }}</span>
+        {% if not recipe.author == user %}
+        <span>{% include './includes/favorite_form.html' %}</span>
+        {% endif %}
         <h1>{{ recipe.title }}</h1>
         <span class="description">{{ recipe.description }}</span>
         <span class="time">{{ recipe.cooking_time }}</span>
@@ -44,4 +47,7 @@
         </ul>
     </div>
 </div>
+{% endblock %}
+{% block footer_scripts %}
+{% include './includes/favorite_script.html' %}
 {% endblock %}

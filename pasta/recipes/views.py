@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404, render
-from django.http import HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect
 from django.http.request import HttpRequest
 from django.urls import reverse, reverse_lazy
 from django.views import generic
@@ -10,12 +10,29 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic.edit import DeleteView
 
 
-class RecipeListView(generic.ListView):
+FAVORITES_LABLE_IN = 'В избранном'
+FAVORITES_LABLE_OUT = 'В избранное'
+
+
+class RecipeBaseListView(generic.ListView):
     model = Recipe
+
+    def get_queryset(self):
+        queryset = Recipe.objects.select_related('author', 'menu', 'cuisine')
+        return queryset
+    
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        favorites = self.request.user.favorites.all()
+        context_data['favorites'] = favorites
+        return context_data
+
+
+class RecipeListView(RecipeBaseListView):
     paginate_by = 10
     
     def get_queryset(self):
-        queryset = Recipe.objects.filter(is_published=1).select_related('author', 'menu', 'cuisine')
+        queryset = super().get_queryset().filter(is_published=1)
         if queryset.exists():
             if self.request.GET:
                 form = RecipeFilterForm(self.request.GET)
@@ -40,7 +57,22 @@ class RecipeDetailView(generic.DetailView):
     model = Recipe
 
     def get_object(self):
-        return Recipe.objects.select_related('cuisine', 'menu', 'author').prefetch_related('recipeingredient_set__ingredient', 'recipeingredient_set__unit','recipestep_set').get(slug=self.kwargs['slug'])
+        recipe = Recipe.objects.select_related('cuisine', 'menu', 'author').prefetch_related('recipeingredient_set__ingredient', 'recipeingredient_set__unit','recipestep_set').filter(slug=self.kwargs.get('slug'))
+        if not recipe.exists():
+            raise Http404
+        return recipe.first()
+    
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        recipe = context_data.get('recipe')
+        favorites = self.request.user.favorites.all()
+        if recipe in favorites:
+            favorites_label = FAVORITES_LABLE_IN
+        else:
+            favorites_label = FAVORITES_LABLE_OUT
+        context_data['favorites'] = favorites
+        context_data['favorites_label'] = favorites_label
+        return context_data
 
 
 @login_required

@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'search.apps.SearchConfig',
     'accounts.apps.AccountsConfig',
     # 'debug_toolbar',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [

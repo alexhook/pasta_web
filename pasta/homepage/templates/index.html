@@ -1,5 +1,51 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-<h1>hi!</h1>
+<div class="main-blocks" id="recipes-block">
+    <h2>РЕЦЕПТЫ</h2>
+    <div class="child-blocks" id="recipes-list">
+        {% if recipe_list %}
+        {% for recipe in recipe_list %}
+        {% include 'recipes/includes/recipe_preview_block.html' %}
+        {% endfor %}
+        {% else %}
+        <span class="empty-info">Кажется наши повара объелись белены и не составили ещё ни одного рецепта. Приносим свои извинения.</span>
+        {% endif %}
+    </div>
+</div>
+<div class="main-blocks" id="wiki-block">
+    <h2>ВИКИ</h2>
+    <div class="child-blocks" id="ingredients-list">
+        <span class="child-title">
+            <span class="child-title-text">Ингредиенты</span>
+            <span> | </span>
+            <a href="{% url 'ingredient-groups-list' %}">Показать все</a>
+        </span>
+        <div class="child-block-content">
+            {% if ingredient_list %}
+            {% for ingredient in ingredient_list %}
+            {% include 'wiki/includes/ingredient_preview_block.html' %}
+            {% endfor %}
+            {% else %}
+            <span class="empty-info">Холодильник опустел. Пора наведаться в магазин.</span>
+            {% endif %}
+        </div>
+    </div>
+    <div class="child-blocks" id="instruments-list">
+        <span class="child-title">
+            <span class="child-title-text">Инструменты</span>
+            <span> | </span>
+            <a href="{% url 'instruments-list' %}">Показать все</a>
+        </span>
+        <div class="child-block-content">
+            {% if instrument_list %}
+            {% for instrument in instrument_list %}
+            {% include 'wiki/includes/instrument_preview_block.html' %}
+            {% endfor %}
+            {% else %}
+            <span class="empty-info">Мастерская закрыта. Инструменты все проданы. Приходите в другой раз.</span>
+            {% endif %}
+        </div>
+    </div>
+</div>
 {% endblock %}

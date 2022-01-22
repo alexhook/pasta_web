@@ -11,11 +11,12 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib import messages
-from recipes.views import RecipeListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from recipes.models import Recipe
 from .forms import MyRecipesFilterForm
 from utils.func import is_ajax
+from recipes.views import RecipeBaseListView, RecipeListView
+from recipes.views import FAVORITES_LABLE_IN, FAVORITES_LABLE_OUT
 
 
 def index(request: HttpRequest):
@@ -100,16 +101,15 @@ class FavoritesListView(LoginRequiredMixin, RecipeListView):
     template_name = 'accounts/favorites_list.html'
 
     def get_queryset(self):
-        queryset = super().get_queryset()
-        queryset = queryset.filter(user=self.request.user)
+        queryset = super().get_queryset().filter(user=self.request.user)
         return queryset
 
 
-class MyRecipesListView(LoginRequiredMixin, RecipeListView):
+class MyRecipesListView(LoginRequiredMixin, RecipeBaseListView):
     template_name = 'accounts/myrecipes_list.html'
 
     def get_queryset(self):
-        queryset = Recipe.objects.filter(author=self.request.user).select_related('author', 'menu', 'cuisine')
+        queryset = super().get_queryset().filter(author=self.request.user)
         if queryset.exists():
             if self.request.GET:
                 form = MyRecipesFilterForm(self.request.GET)
@@ -139,22 +139,32 @@ class MyRecipesListView(LoginRequiredMixin, RecipeListView):
         )
         return context_data
 
-@login_required
 def favorites_update(request: HttpRequest, slug):
     if request.method == 'POST' and is_ajax(request):
         recipe = Recipe.objects.filter(slug=slug)
+        error = None
         if not recipe.exists():
             error = 'Рецепт не найден.'
-            return JsonResponse({'errors': error}, status=400)
-        recipe = recipe[0]
-        if recipe.author == request.user:
-            error = 'Невозможно добавить собственный рецепт в избранное.'
+        else:
+            recipe = recipe.first()
+            if request.user.is_anonymous:
+                error = 'Войдите в систему, чтобы добавить рецепт в избранное.'
+            elif recipe.author == request.user:
+                error = 'Невозможно добавить собственный рецепт в избранное.'
+        if error is not None:
             return JsonResponse({'errors': error}, status=400)
         favorites = request.user.favorites
         if favorites.filter(slug=slug).exists():
             favorites.remove(recipe)
+            favorites_label = FAVORITES_LABLE_OUT
         else:
             favorites.add(recipe)
-        return JsonResponse({}, status=200)
+            favorites_label = FAVORITES_LABLE_IN
+        return JsonResponse(
+            {
+                'favorites_label': favorites_label,
+            },
+            status=200
+        )
     else:
         raise Http404
