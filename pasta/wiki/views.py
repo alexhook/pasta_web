@@ -7,7 +7,7 @@ from django.http import Http404
 def index(request: HttpRequest):
     return render(
         request,
-        'wiki-index.html',
+        'wiki/wiki-index.html',
         context={}
     )
 

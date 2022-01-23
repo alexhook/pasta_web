@@ -1,5 +1,7 @@
 {% extends "wiki/ingredient_list.html" %}
 
+{% block title %}<title>Паста | Поиск ингредиентов</title>{% endblock %}
+
 {% block navigation_button %}
 <a href="{% url 'search' %}?text={{ text|urlencode }}"><i class="fa fa-arrow-left" aria-hidden="true"></i></a>
 {% endblock navigation_button %}

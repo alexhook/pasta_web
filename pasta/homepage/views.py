@@ -1,28 +1,77 @@
 from django.http.request import HttpRequest
 from django.shortcuts import render
 from recipes.models import Recipe
+from wiki.models import Ingredient, Instrument
 import random, json
+from django.db.models import Model
 
 
-COOKIES_EXPIRE_TIME = 30
-RECIPE_RANDOM_SAMPLE_SIZE = 1
+COOKIES_EXPIRE_TIME = 1800
+RECIPE_RANDOM_SAMPLE_SIZE = 5
+INGREDIENT_RANDOM_SAMPLE_SIZE = 3
+INSTRUMENT_RANDOM_SAMPLE_SIZE = 3
 
+
+def get_random_queryset(
+                model_obj: Model, 
+                request: HttpRequest, 
+                max_age: float, 
+                ss: int, 
+                get_expired: bool = False, 
+                **kwargs
+            ):
+    model_name = model_obj.__name__.lower()
+    qs = model_obj.objects.filter(**kwargs)
+    ids, expired = request.get_signed_cookie(f'{model_name}_ids', False, max_age=max_age), False
+    if ids is False:
+        expired = True
+        db_ids = list(qs.values_list('id', flat=True))
+        ids = random.sample(db_ids, min(ss, len(db_ids)))
+    else:
+        ids = json.loads(ids)
+    qs = qs.filter(id__in=ids)
+    if get_expired:
+        return qs, ids, expired
+    return qs, ids
 
 def index(request: HttpRequest):
-    recipe_random_ids = request.get_signed_cookie('recipe_random_ids', False, max_age=COOKIES_EXPIRE_TIME)
-    recipe_queryset = Recipe.objects.filter(is_published=1)
-    if recipe_random_ids is False:
-        recipe_ids_list = list(recipe_queryset.values_list('id', flat=True))
-        recipe_random_ids = random.sample(recipe_ids_list, min(RECIPE_RANDOM_SAMPLE_SIZE, len(recipe_ids_list)))
-    else:
-        recipe_random_ids = json.loads(recipe_random_ids)
-    recipe_random_queryset = recipe_queryset.filter(id__in=recipe_random_ids).select_related('menu', 'cuisine')
+    recipe_qs, recipe_ids, expired = get_random_queryset(
+                                        Recipe, 
+                                        request, 
+                                        COOKIES_EXPIRE_TIME, 
+                                        RECIPE_RANDOM_SAMPLE_SIZE, 
+                                        get_expired=True, 
+                                        is_published=1
+                                    )
+    ingredient_qs, ingredient_ids = get_random_queryset(
+                                        Ingredient, 
+                                        request, 
+                                        COOKIES_EXPIRE_TIME, 
+                                        INGREDIENT_RANDOM_SAMPLE_SIZE
+                                    )
+    instrument_qs, instrument_ids = get_random_queryset(
+                                        Instrument, 
+                                        request, 
+                                        COOKIES_EXPIRE_TIME, 
+                                        INSTRUMENT_RANDOM_SAMPLE_SIZE
+                                    )
+
+    favorites = []
+    if request.user.is_authenticated:
+        favorites = request.user.favorites.all()
+
     response = render(
         request,
         'index.html',
         context={
-            'recipe_list': recipe_random_queryset,
+            'recipe_list': recipe_qs.select_related('menu', 'cuisine'),
+            'ingredient_list': ingredient_qs.select_related('group'),
+            'instrument_list': instrument_qs,
+            'favorites': favorites,
         }
     )
-    response.set_signed_cookie('recipe_random_ids', recipe_random_ids)
+    if expired:
+        response.set_signed_cookie('recipe_ids', recipe_ids)
+        response.set_signed_cookie('ingredient_ids', ingredient_ids)
+        response.set_signed_cookie('instrument_ids', instrument_ids)
     return response

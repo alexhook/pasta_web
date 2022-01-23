@@ -1,5 +1,6 @@
 {% extends "base_generic.html" %}
 
+{% block title %}<title>Паста | {{ recipe.title }}</title>{% endblock %}
 {% block content %}
 {% if recipe.author.id == request.user.id %}
 <div class="admin-panel">

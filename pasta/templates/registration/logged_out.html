@@ -1,7 +1,9 @@
 {% extends "base_generic.html" %}
 
-{% block content %}
-<p>Logged out!</p>
+{% block title %}<title>Паста | До встречи!</title>{% endblock %}
 
-<a href="{% url 'login'%}">Click here to login again.</a>
+{% block content %}
+<p>До скорой встречи!</p>
+
+<a href="{% url 'login'%}">Войти повторно</a>
 {% endblock %}

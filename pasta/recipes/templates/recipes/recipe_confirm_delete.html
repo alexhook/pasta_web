@@ -1,5 +1,6 @@
 {% extends "base_generic.html" %}
 
+{% block title %}<title>Паста | Удалить "{{ recipe.title }}"?</title>{% endblock %}
 {% block content %}
 <form method="post">
     {% csrf_token %}

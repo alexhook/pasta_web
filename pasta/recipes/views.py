@@ -23,8 +23,9 @@ class RecipeBaseListView(generic.ListView):
     
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        favorites = self.request.user.favorites.all()
-        context_data['favorites'] = favorites
+        if self.request.user.is_authenticated:
+            favorites = self.request.user.favorites.all()
+            context_data['favorites'] = favorites
         return context_data
 
 
