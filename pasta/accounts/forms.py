@@ -27,6 +27,7 @@ class UserCreationForm(forms.ModelForm):
         # Save the provided password in hashed format
         user = super().save(commit=False)
         user.set_password(self.cleaned_data["password1"])
+        user.is_active = True
         if commit:
             user.save()
         return user
@@ -41,7 +42,7 @@ class UserChangeForm(forms.ModelForm):
 
     class Meta:
         model = get_user_model()
-        fields = ('email', 'password', 'is_active', 'is_admin')
+        fields = ('email', 'password', 'is_active', 'is_confirmed', 'is_admin')
 
 
 class ChangeUserPersonalInfoModelForm(forms.ModelForm):

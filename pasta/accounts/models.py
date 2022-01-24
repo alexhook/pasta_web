@@ -1,7 +1,8 @@
 from django.db import models
+from django.http import HttpRequest
 from django.utils import timezone
 from django.core.mail import send_mail
-from django.template.response import SimpleTemplateResponse
+from django.template.response import TemplateResponse
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
 
 
@@ -36,15 +37,28 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    email = models.EmailField('адрес электронной почты', max_length=255, unique=True)
-    first_name = models.CharField('имя', max_length=150, null=True, blank=False)
-    last_name = models.CharField('фамилия', max_length=150, null=True, blank=False)
-    photo = models.ImageField('фото', upload_to='users/', null=True, blank=False)
+    email = models.EmailField('Адрес электронной почты', max_length=255, unique=True)
+    first_name = models.CharField('Имя', max_length=150, null=True, blank=False)
+    last_name = models.CharField('Фамилия', max_length=150, null=True, blank=False)
+    photo = models.ImageField('Фото', upload_to='users/', null=True, blank=False)
     favorites = models.ManyToManyField('recipes.Recipe')
-    date_joined = models.DateTimeField('дата регистрации', default=timezone.now)
+    date_joined = models.DateTimeField('Дата регистрации', default=timezone.now)
 
-    is_active = models.BooleanField('активный', default=False, help_text='Только активные пользователи могут проходить авторизацию.')
-    is_admin = models.BooleanField('администратор', default=False, help_text='Дает право доступа к панели администратора.')
+    is_active = models.BooleanField(
+        'Активный', 
+        default=False, 
+        help_text='Только активные пользователи могут проходить авторизацию.'
+    )
+    is_confirmed = models.BooleanField(
+        'Эл. почта подтверждена', 
+        default=False, 
+        help_text='Пользователи с неподтвержденными почтовыми ящиками не могут создавать рецепты.'
+    )
+    is_admin = models.BooleanField(
+        'Администратор', 
+        default=False, 
+        help_text='Дает право доступа к панели администратора.'
+    )
 
     objects = UserManager()
 
@@ -53,8 +67,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = []
 
     class Meta:
-        verbose_name = 'пользователь'
-        verbose_name_plural = 'пользователи'
+        verbose_name = 'Пользователь'
+        verbose_name_plural = 'Пользователи'
 
     def __str__(self):
         return self.email
@@ -73,6 +87,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     def get_short_name(self):
         """Return the short name for the user."""
         return self.first_name
+    
+    def is_filled_initials(self):
+        if self.first_name and self.last_name:
+            return True
+        return False
 
     def email_user(self, subject, message, from_email=None, **kwargs):
         """Send an email to this user."""
@@ -84,10 +103,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.is_admin
 
 
-class ActivationMessage(SimpleTemplateResponse):
-    def __init__(self, msg: str, **kwargs):
-        template = 'accounts/activation_message.html'
-        super().__init__(template, **kwargs)
-        self.context_data = {
-            'msg': msg, 
-        }
+class BlancPage(TemplateResponse):
+    def __init__(self, request: HttpRequest, **kwargs):
+        template = 'blanc_page.html'
+        super().__init__(request, template, **kwargs)

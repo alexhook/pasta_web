@@ -27,10 +27,10 @@ class MenuAdmin(admin.ModelAdmin):
 @admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
     exclude = ['slug']
-    list_display = ('title', 'slug', 'cuisine', 'menu', 'author', 'is_published',)
-    list_filter = ('cuisine', 'menu', 'is_published',)
+    list_display = ('title', 'slug', 'cuisine', 'menu', 'author', 'creation_date', 'is_published',)
+    list_filter = ('cuisine', 'menu', 'creation_date', 'is_published',)
     search_fields = ('title', 'slug', 'author__email')
-    ordering = ('title', 'slug',)
+    ordering = ('title', 'slug', 'creation_date',)
     inlines = [RecipeIngredientInline, RecipeStepInline]
 
 @admin.register(AmoutUnit)

@@ -9,7 +9,7 @@ from utils.func import both
 class RecipeModelForm(ModelForm):
     class Meta:
         model = Recipe
-        fields = '__all__'
+        exclude = ['slug', 'author', 'creation_date']
 
 
 class RecipeFilterForm(forms.Form):

@@ -6,8 +6,9 @@ from django.views import generic
 from .models import Recipe, RecipeIngredient, RecipeStep
 from .forms import RecipeFilterForm, RecipeModelForm, RecipeIngredientModelForm, RecipeStepModelForm, BaseRecipeIngredientFormSet, BaseRecipeStepFormSet, BaseRecipeIngredientModelFormSet, BaseRecipeStepModelFormSet
 from django.forms import formset_factory, modelformset_factory
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.views.generic.edit import DeleteView
+from django.contrib import messages
 
 
 FAVORITES_LABLE_IN = 'В избранном'
@@ -78,6 +79,16 @@ class RecipeDetailView(generic.DetailView):
 
 @login_required
 def recipe_create_form(request: HttpRequest):
+    if not request.user.is_confirmed:
+        from accounts.views import send_activation_message
+        return send_activation_message(request)
+    if not request.user.is_filled_initials():
+        messages.error(
+            request, 
+            'Пожалуйста, заполните поля ниже для возможности создания рецептов!'
+        )
+        return HttpResponseRedirect(f'{reverse("change-personal-info")}?next=/recipes/create/')
+
     RecipeIngredientFormSet = formset_factory(
         RecipeIngredientModelForm,
         formset=BaseRecipeIngredientFormSet,
