@@ -14,9 +14,9 @@ def index(request: HttpRequest):
     if form.is_valid():
         text = form.cleaned_data.get('text', '').strip()
         if text:
-            recipe_list = Recipe.objects.filter(is_published=1, title__iregex=rf'{text}').select_related('author', 'menu', 'cuisine')
-            ingredient_list = Ingredient.objects.filter(name__iregex=rf'{text}').select_related('group')
-            instrument_list = Instrument.objects.filter(name__iregex=rf'{text}')
+            recipe_list = Recipe.objects.filter(is_published=1, title__icontains=text).select_related('author', 'menu', 'cuisine')
+            ingredient_list = Ingredient.objects.filter(name__icontains=text).select_related('group')
+            instrument_list = Instrument.objects.filter(name__icontains=text)
     return render(
         request,
         'search/index_search.html',
@@ -38,7 +38,7 @@ class RecipeSearchListView(RecipeListView):
         text = self.request.GET.get('text', '').strip()
         if not queryset.exists() or not text:
             return []
-        return queryset.filter(title__iregex=rf'{text}')
+        return queryset.filter(title__icontains=text)
     
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
@@ -58,7 +58,7 @@ class IngredientSearchListView(IngredientListView):
         text = self.request.GET.get('text', '').strip()
         if not text:
             return []
-        queryset = Ingredient.objects.filter(name__iregex=rf'{text}')
+        queryset = Ingredient.objects.filter(name__icontains=text)
         return queryset
     
     def get_context_data(self, **kwargs):
@@ -77,7 +77,7 @@ class InstrumentSearchListView(InstrumentListView):
         text = self.request.GET.get('text', '').strip()
         if not text:
             return []
-        queryset = Instrument.objects.filter(name__iregex=rf'{text}')
+        queryset = Instrument.objects.filter(name__icontains=text)
         return queryset
     
     def get_context_data(self, **kwargs):
