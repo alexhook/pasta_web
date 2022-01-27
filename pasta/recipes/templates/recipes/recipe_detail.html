@@ -2,11 +2,17 @@
 
 {% block title %}<title>Паста | {{ recipe.title }}</title>{% endblock %}
 {% block content %}
-{% if recipe.author.id == request.user.id %}
-<div class="admin-panel">
+{% if recipe.author == request.user %}
+<div class="author-panel">
+    <a href="{% url 'recipe-publish' recipe.slug %}" class="button publish-button{% if recipe.is_published %} unpublish{% endif %}">{% if recipe.is_published %}Снять с публикации{% else %}Опубликовать{% endif %}</a>
     <a href="{% url 'recipe-edit' recipe.slug %}" class="button edit-button">Редактировать</a>
     <a href="{% url 'recipe-remove' recipe.slug %}" class="button remove-button">Удалить</a>
 </div>
+{% if not recipe.is_published %}
+<div class="draft-label">
+    <span style="color: darkred;">Черновик</span>
+</div>
+{% endif %}
 {% endif %}
 <div class="recipe-detail">
     <div id="creation-date">{{ recipe.creation_date|date:"d.m.Y" }}</div>
@@ -21,7 +27,11 @@
         <span class="description">{{ recipe.description }}</span>
         <span class="time">{{ recipe.cooking_time }}</span>
         <div class="author-info">
+            {% if recipe.author.photo %}
             <img src="{{ recipe.author.photo.url }}" width="50" height="50">
+            {% else %}
+            {% include 'accounts/includes/default_user_photo.html' %}
+            {% endif %}
             <span>{{ recipe.author.get_full_name }}</span>
         </div>
     </div>

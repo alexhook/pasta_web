@@ -13,6 +13,8 @@
             {{ form.photo.label }}<br>
             {% if request.user.photo %}
             <img src="{{ request.user.photo.url }}" width="100" height="100"><br>
+            {% else %}
+            {% include 'accounts/includes/default_user_photo.html' %}<br>
             {% endif %}
             {{ form.photo }}
             {{ form.photo.errors }}

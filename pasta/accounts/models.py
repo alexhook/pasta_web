@@ -40,7 +40,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField('Адрес электронной почты', max_length=255, unique=True)
     first_name = models.CharField('Имя', max_length=150, null=True, blank=False)
     last_name = models.CharField('Фамилия', max_length=150, null=True, blank=False)
-    photo = models.ImageField('Фото', upload_to='users/', null=True, blank=False)
+    photo = models.ImageField('Фото', upload_to='users/', null=True, blank=True)
     favorites = models.ManyToManyField('recipes.Recipe')
     date_joined = models.DateTimeField('Дата регистрации', default=timezone.now)
 
@@ -88,7 +88,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         """Return the short name for the user."""
         return self.first_name
     
-    def is_filled_initials(self):
+    def has_filled_initials(self):
         if self.first_name and self.last_name:
             return True
         return False

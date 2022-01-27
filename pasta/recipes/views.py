@@ -82,7 +82,7 @@ def recipe_create_form(request: HttpRequest):
     if not request.user.is_confirmed:
         from accounts.views import send_activation_message
         return send_activation_message(request)
-    if not request.user.is_filled_initials():
+    if not request.user.has_filled_initials():
         messages.error(
             request, 
             'Пожалуйста, заполните поля ниже для возможности создания рецептов!'
@@ -202,3 +202,18 @@ def recipe_edit_form(request: HttpRequest, slug):
 class RecipeDeleteView(DeleteView):
     model = Recipe
     success_url = reverse_lazy('recipe-list')
+
+
+@login_required
+def change_recipe_publish(request: HttpRequest, slug):
+    recipe = get_object_or_404(Recipe, slug=slug)
+    if not recipe.author == request.user:
+        raise Http404
+    if recipe.is_published:
+        recipe.is_published = False
+        messages.success(request, 'Рецепт успешно снят с публикации!')
+    else:
+        recipe.is_published = True
+        messages.success(request, 'Рецепт успешно опубликован!')
+    recipe.save()
+    return HttpResponseRedirect(reverse('recipe-detail', kwargs={'slug': slug}))
