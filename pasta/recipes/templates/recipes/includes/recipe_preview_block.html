@@ -5,6 +5,9 @@
     <ul class="info">
         <li class="types">
             <ul>
+                {% if recipe.author == user %}
+                <li>Ваш рецепт</li>
+                {% endif %}
                 <li class="menu">{{ recipe.menu.name }}</li>
                 <li class="cuisine">{{ recipe.cuisine.name }}</li>
                 {% if not recipe.is_published %}
@@ -12,11 +15,14 @@
                     <span style="color: darkred;">Черновик</span>
                 </li>
                 {% endif %}
-                {% if not recipe.author == user %}
                 <li>
+                    {% if not recipe.author == user %}
                     {% include './favorite_form.html' %}
+                    {% else %}
+                    <i class="far fa-bookmark"></i>
+                    <span class="favorite-count">{{ recipe.user_set.count | default:0 }}</span>
+                    {% endif %}
                 </li>
-                {% endif %}
             </ul>
         </li>
         <li class="title"><a href="{{ recipe.get_absolute_url }}">{{ recipe.title }}</a></li>

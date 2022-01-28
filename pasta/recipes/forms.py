@@ -13,8 +13,19 @@ class RecipeModelForm(ModelForm):
 
 
 class RecipeFilterForm(forms.Form):
-    menu = forms.ModelChoiceField(queryset=Menu.objects.all(), required=False, label='Меню', empty_label='')
-    cuisine = forms.ModelChoiceField(queryset=Cuisine.objects.all(), required=False, label='Кухня', empty_label='')
+    menu = forms.ModelChoiceField(queryset=Menu.objects.all(), required=False, label='Меню', empty_label='Все')
+    cuisine = forms.ModelChoiceField(queryset=Cuisine.objects.all(), required=False, label='Кухня', empty_label='Все')
+    sortby = forms.ChoiceField(
+        choices=(
+            ('', 'Нет'),
+            ('1', 'Сначала популярные'), 
+            ('2', 'Сначала непопулярные'),
+            ('3', 'Сначала новые'),
+            ('4', 'Сначала старые'),
+        ), 
+        required=False,
+        label='Сортировка'
+    )
 
 
 class RecipeIngredientModelForm(ModelForm):
@@ -77,7 +88,7 @@ class RecipeStepCleanMixin:
 
 
 class CleanAndSaveMixin:
-    def crean_and_save(self, **kwargs):
+    def clear_and_save(self, **kwargs):
         for form in self.forms:
             instance = form.cleaned_data.get('id')
             if not form.cleaned_data or form.cleaned_data.get('DELETE', False):

@@ -11,10 +11,6 @@ from django.views.generic.edit import DeleteView
 from django.contrib import messages
 
 
-FAVORITES_LABLE_IN = 'В избранном'
-FAVORITES_LABLE_OUT = 'В избранное'
-
-
 class RecipeBaseListView(generic.ListView):
     model = Recipe
 
@@ -68,12 +64,7 @@ class RecipeDetailView(generic.DetailView):
         context_data = super().get_context_data(**kwargs)
         recipe = context_data.get('recipe')
         favorites = self.request.user.favorites.all()
-        if recipe in favorites:
-            favorites_label = FAVORITES_LABLE_IN
-        else:
-            favorites_label = FAVORITES_LABLE_OUT
         context_data['favorites'] = favorites
-        context_data['favorites_label'] = favorites_label
         return context_data
 
 
@@ -120,8 +111,8 @@ def recipe_create_form(request: HttpRequest):
                 recipe.is_published = 1
             recipe.save()
 
-            ingredient_formset.crean_and_save(recipe=recipe)
-            step_formset.crean_and_save(recipe=recipe)
+            ingredient_formset.clear_and_save(recipe=recipe)
+            step_formset.clear_and_save(recipe=recipe)
 
             return HttpResponseRedirect(reverse('recipe-detail', kwargs={'slug': recipe.slug}))
     else:
@@ -179,8 +170,8 @@ def recipe_edit_form(request: HttpRequest, slug):
                 recipe.is_published = 0
             recipe.save()
 
-            ingredient_formset.crean_and_save(recipe=recipe)
-            step_formset.crean_and_save(recipe=recipe)
+            ingredient_formset.clear_and_save(recipe=recipe)
+            step_formset.clear_and_save(recipe=recipe)
 
             return HttpResponseRedirect(reverse('recipe-detail', kwargs={'slug': recipe.slug}))
     else:

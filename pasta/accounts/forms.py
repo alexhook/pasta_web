@@ -59,6 +59,5 @@ class MyRecipesFilterForm(RecipeFilterForm):
             ('0', 'Сохраненные'),
         ), 
         required=False, 
-        label='Публикация', 
-        initial=1
+        label='Публикации',
     )

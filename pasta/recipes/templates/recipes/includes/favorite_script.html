@@ -12,14 +12,16 @@
                 dataType: "json",
                 success: function(response) {
                     let i = form.find("i").first()
-                    let span = form.find("span").first()
+                    let span = form.find(".favorite-count").first()
+                    let favotiteCounter = parseInt(span.text())
                     let favoritesClassName = 'favorite'
                     if (i.hasClass(favoritesClassName)) {
                         i.removeClass(favoritesClassName)
+                        span.text(favotiteCounter-1)
                     } else {
                         i.addClass(favoritesClassName)
+                        span.text(favotiteCounter+1)
                     }
-                    span.text(response.favorites_label)
                 },
                 error: function(response) {
                     alert(response.responseJSON.errors)

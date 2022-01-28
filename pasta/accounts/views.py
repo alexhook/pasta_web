@@ -17,7 +17,6 @@ from recipes.models import Recipe
 from .forms import MyRecipesFilterForm
 from utils.func import is_ajax
 from recipes.views import RecipeBaseListView, RecipeListView
-from recipes.views import FAVORITES_LABLE_IN, FAVORITES_LABLE_OUT
 
 
 @login_required
@@ -181,14 +180,10 @@ def favorites_update(request: HttpRequest, slug):
         favorites = request.user.favorites
         if favorites.filter(slug=slug).exists():
             favorites.remove(recipe)
-            favorites_label = FAVORITES_LABLE_OUT
         else:
             favorites.add(recipe)
-            favorites_label = FAVORITES_LABLE_IN
         return JsonResponse(
-            {
-                'favorites_label': favorites_label,
-            },
+            {},
             status=200
         )
     else:
