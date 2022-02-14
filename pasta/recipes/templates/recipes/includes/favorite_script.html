@@ -14,7 +14,7 @@
                     let i = form.find("i").first()
                     let span = form.find(".favorite-count").first()
                     let favotiteCounter = parseInt(span.text())
-                    let favoritesClassName = 'favorite'
+                    let favoritesClassName = 'marked'
                     if (i.hasClass(favoritesClassName)) {
                         i.removeClass(favoritesClassName)
                         span.text(favotiteCounter-1)

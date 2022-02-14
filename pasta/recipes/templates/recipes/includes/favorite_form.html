@@ -1,7 +1,7 @@
 <form class="favorite-update-form" action="{% url 'favorites-update' recipe.slug %}" method="post">
     {% csrf_token %}
     <button type="submit">
-        <i class="far fa-bookmark{% if recipe in favorites %} favorite{% endif %}"></i>
+        <i class="far fa-bookmark fa-lg{% if recipe in favorites %} marked{% endif %}"></i>
     </button>
     <span class="favorite-count">{{ recipe.user_set.count | default:0 }}</span>
 </form>

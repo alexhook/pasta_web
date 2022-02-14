@@ -24,6 +24,7 @@ urlpatterns = [
     path('recipes/', include('recipes.urls')),
     path('wiki/', include('wiki.urls')),
     path('search/', include('search.urls')),
+    path('select2/', include('django_select2.urls')),
 ]
 
 # Используйте static() чтобы добавить соотношения для статических файлов

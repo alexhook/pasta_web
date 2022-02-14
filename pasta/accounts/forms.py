@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.core.exceptions import ValidationError
 from recipes.forms import RecipeFilterForm
+from .widgets import PhotoWidget
 
 
 class UserCreationForm(forms.ModelForm):
@@ -49,6 +50,9 @@ class ChangeUserPersonalInfoModelForm(forms.ModelForm):
     class Meta:
         model = get_user_model()
         fields = ('first_name', 'last_name', 'photo',)
+        widgets = {
+            'photo': PhotoWidget,
+        }
 
 
 class MyRecipesFilterForm(RecipeFilterForm):

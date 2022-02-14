@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     # 'debug_toolbar',
     'django_extensions',
+    'django_select2',
 ]
 
 MIDDLEWARE = [
@@ -76,6 +77,25 @@ TEMPLATES = [
     },
 ]
 
+CACHES = {
+    'default': {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    },
+    'select2': {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/2",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
+
+SELECT2_CACHE_BACKEND = "select2"
+
 WSGI_APPLICATION = 'pasta.wsgi.application'
 
 
@@ -86,7 +106,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'OPTIONS': {
-            'read_default_file': '~/.pasta.cnf',
+            'read_default_file': '.pasta.cnf',
         },
     }
 }

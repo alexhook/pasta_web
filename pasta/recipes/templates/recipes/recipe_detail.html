@@ -25,7 +25,7 @@
         {% endif %}
         <h1>{{ recipe.title }}</h1>
         <span class="description">{{ recipe.description }}</span>
-        <span class="time">{{ recipe.cooking_time }}</span>
+        {% include './includes/cooking_time.html' %}
         <div class="author-info">
             {% if recipe.author.photo %}
             <img src="{{ recipe.author.photo.url }}" width="50" height="50">

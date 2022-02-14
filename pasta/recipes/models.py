@@ -29,10 +29,10 @@ class Menu(models.Model):
 
 class Recipe(models.Model):
     title = models.CharField(max_length=50, verbose_name='Наименование')
-    slug = models.SlugField(unique=True, blank=True, null=False, help_text='Заполняется автоматически.')
+    slug = models.SlugField(max_length=70, unique=True, blank=True, null=False, help_text='Заполняется автоматически.')
     cuisine = models.ForeignKey('Cuisine', on_delete=models.SET_NULL, null=True, verbose_name='Кухня')
     menu = models.ForeignKey('Menu', on_delete=models.SET_NULL, null=True, verbose_name='Меню')
-    cooking_time = models.DurationField(null=True, verbose_name='Время приготовления')
+    cooking_time = models.TimeField(null=True, verbose_name='Время приготовления')
     image = models.ImageField(upload_to='recipes/recipe/', verbose_name='Фотография готового блюда')
     description = models.TextField(verbose_name='Описание блюда')
     author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, blank=True, verbose_name='Автор')

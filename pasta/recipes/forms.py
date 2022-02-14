@@ -1,3 +1,4 @@
+import datetime
 from django import forms
 from django.forms import ModelForm
 from django.forms.formsets import BaseFormSet
@@ -5,11 +6,22 @@ from django.forms.models import BaseModelFormSet
 from .models import Menu, Cuisine, Recipe, RecipeIngredient, RecipeStep
 from django.core.exceptions import ValidationError
 from utils.func import both
+from .widgets import ImageWidget
 
 class RecipeModelForm(ModelForm):
     class Meta:
         model = Recipe
         exclude = ['slug', 'author', 'creation_date']
+        widgets = {
+            'cooking_time': forms.TimeInput(attrs={'type': 'time'}),
+            'image': ImageWidget,
+        }
+    
+    def clean_cooking_time(self):
+        cooking_time = self.cleaned_data['cooking_time']
+        if cooking_time == datetime.time():
+            raise ValidationError('Укажите время приготовления блюда.')
+        return cooking_time
 
 
 class RecipeFilterForm(forms.Form):
@@ -35,7 +47,10 @@ class RecipeIngredientModelForm(ModelForm):
     
     def clean_amount(self):
         amount = self.cleaned_data['amount']
-        need_amount = self.cleaned_data['unit'].need_amount
+        try:
+            need_amount = self.cleaned_data['unit'].need_amount
+        except KeyError:
+            need_amount = False
         if not both(need_amount, amount):
             if amount:
                 return None
@@ -47,6 +62,9 @@ class RecipeStepModelForm(ModelForm):
     class Meta:
         model = RecipeStep
         fields = '__all__'
+        widgets = {
+            'image': ImageWidget,
+        }
 
 
 class RecipeIngredientCleanMixin:

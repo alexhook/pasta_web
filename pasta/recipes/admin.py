@@ -1,7 +1,9 @@
+from dataclasses import field
+from django import forms
 from django.contrib import admin
 from django.template.defaultfilters import truncatechars
 from .models import Cuisine, Menu, Recipe, AmoutUnit, RecipeIngredient, RecipeStep
-
+from .views import COOKING_TIME_INITIAL_DATA
 
 class RecipeIngredientInline(admin.TabularInline):
     model = RecipeIngredient
@@ -10,6 +12,15 @@ class RecipeIngredientInline(admin.TabularInline):
 class RecipeStepInline(admin.StackedInline):
     model = RecipeStep
     extra = 0
+
+
+class RecipeAdminForm(forms.ModelForm):
+    class Meta:
+        model = Recipe
+        fields = '__all__'
+        widgets = {
+            'cooking_time': forms.TimeInput(attrs={'type': 'time'})
+        }
 
 
 @admin.register(Cuisine)
@@ -26,12 +37,17 @@ class MenuAdmin(admin.ModelAdmin):
 
 @admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
+    form = RecipeAdminForm
     exclude = ['slug']
     list_display = ('title', 'slug', 'cuisine', 'menu', 'author', 'creation_date', 'is_published',)
     list_filter = ('cuisine', 'menu', 'creation_date', 'is_published',)
     search_fields = ('title', 'slug', 'author__email')
     ordering = ('title', 'slug', 'creation_date',)
     inlines = [RecipeIngredientInline, RecipeStepInline]
+
+    def get_changeform_initial_data(self, request):
+        return {'cooking_time': COOKING_TIME_INITIAL_DATA}
+
 
 @admin.register(AmoutUnit)
 class AmoutUnitAdmin(admin.ModelAdmin):

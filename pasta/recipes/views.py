@@ -11,6 +11,8 @@ from django.views.generic.edit import DeleteView
 from django.contrib import messages
 
 
+COOKING_TIME_INITIAL_DATA = '01:00'
+
 class RecipeBaseListView(generic.ListView):
     model = Recipe
 
@@ -116,7 +118,7 @@ def recipe_create_form(request: HttpRequest):
 
             return HttpResponseRedirect(reverse('recipe-detail', kwargs={'slug': recipe.slug}))
     else:
-        recipe_form = RecipeModelForm(prefix='recipe')
+        recipe_form = RecipeModelForm(prefix='recipe', initial={'cooking_time': COOKING_TIME_INITIAL_DATA})
         ingredient_formset = RecipeIngredientFormSet(prefix='ingredient')
         step_formset = RecipeStepFormSet(prefix='step')
     

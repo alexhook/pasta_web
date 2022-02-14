@@ -1,39 +1,31 @@
 <div class="recipe-preview">
-    <a href="{{ recipe.get_absolute_url }}">
-        <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}" width="100" height="100">
-    </a>
-    <ul class="info">
-        <li class="types">
-            <ul>
-                {% if recipe.author == user %}
-                <li>Ваш рецепт</li>
-                {% endif %}
-                <li class="menu">{{ recipe.menu.name }}</li>
-                <li class="cuisine">{{ recipe.cuisine.name }}</li>
-                {% if not recipe.is_published %}
-                <li class="draft-label">
-                    <span style="color: darkred;">Черновик</span>
-                </li>
-                {% endif %}
-                <li>
-                    {% if not recipe.author == user %}
-                    {% include './favorite_form.html' %}
-                    {% else %}
-                    <i class="far fa-bookmark"></i>
-                    <span class="favorite-count">{{ recipe.user_set.count | default:0 }}</span>
-                    {% endif %}
-                </li>
-            </ul>
-        </li>
-        <li class="title"><a href="{{ recipe.get_absolute_url }}">{{ recipe.title }}</a></li>
-        <li class="time">{{ recipe.cooking_time }}</li>
-        <li class="author">
-            {% if recipe.author.photo %}
-            <img src="{{ recipe.author.photo.url }}" width="50" height="50">
-            {% else %}
-            {% include 'accounts/includes/default_user_photo.html' %}
-            {% endif %}
-            <div>{{ recipe.author.get_full_name }}</div>
-        </li>
-    </ul>
+    <div class="cover-wrapper">
+        <a href="{{ recipe.get_absolute_url }}">
+            <img src="{{ recipe.image.url }}">
+        </a>
+    </div>
+    {% if recipe.author == user %}
+    {% if not recipe.is_published %}
+    <div class="draft-label unselectable">
+        <i class="fas fa-pen"></i>
+        <span>Черновик</span>
+    </div>
+    {% else %}
+    <div class="owner-label unselectable">
+        <i class="fas fa-crown"></i>
+        <span>Ваш рецепт</span>
+    </div>
+    {% endif %}{% endif %}
+    <div class="menu-cuisine unselectable">{{ recipe.menu.name }} &#8226; {{ recipe.cuisine.name }}</div>
+    <div class="title"><a href="{{ recipe.get_absolute_url }}">{{ recipe.title }}</a></div>
+    <div class="cooking-time unselectable">{% include './cooking_time.html' %}</div>
+    <div class="author unselectable">{% include './author_label.html' %}</div>
+    <div class="favorite unselectable">
+        {% if not recipe.author == user %}
+        {% include './favorite_form.html' %}
+        {% else %}
+        <i class="far fa-bookmark fa-lg"></i>
+        <span class="favorite-count">{{ recipe.user_set.count | default:0 }}</span>
+        {% endif %}
+    </div>
 </div>
