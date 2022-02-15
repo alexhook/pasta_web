@@ -6,10 +6,7 @@
     </div>
     {% if recipe.author == user %}
     {% if not recipe.is_published %}
-    <div class="draft-label unselectable">
-        <i class="fas fa-pen"></i>
-        <span>Черновик</span>
-    </div>
+    {% include './draft_label.html' %}
     {% else %}
     <div class="owner-label unselectable">
         <i class="fas fa-crown"></i>
@@ -21,11 +18,6 @@
     <div class="cooking-time unselectable">{% include './cooking_time.html' %}</div>
     <div class="author unselectable">{% include './author_label.html' %}</div>
     <div class="favorite unselectable">
-        {% if not recipe.author == user %}
         {% include './favorite_form.html' %}
-        {% else %}
-        <i class="far fa-bookmark fa-lg"></i>
-        <span class="favorite-count">{{ recipe.user_set.count | default:0 }}</span>
-        {% endif %}
     </div>
 </div>

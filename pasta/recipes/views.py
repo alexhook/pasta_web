@@ -60,13 +60,16 @@ class RecipeDetailView(generic.DetailView):
         recipe = Recipe.objects.select_related('cuisine', 'menu', 'author').prefetch_related('recipeingredient_set__ingredient', 'recipeingredient_set__unit','recipestep_set').filter(slug=self.kwargs.get('slug'))
         if not recipe.exists():
             raise Http404
-        return recipe.first()
+        recipe = recipe.first()
+        if not recipe.is_published and recipe.author != self.request.user:
+            raise Http404
+        return recipe
     
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        recipe = context_data.get('recipe')
-        favorites = self.request.user.favorites.all()
-        context_data['favorites'] = favorites
+        if self.request.user.is_authenticated:
+            favorites = self.request.user.favorites.all()
+            context_data['favorites'] = favorites
         return context_data
 
 

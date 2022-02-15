@@ -1,42 +1,37 @@
 {% extends "base_generic.html" %}
 
 {% block title %}<title>Паста | {{ recipe.title }}</title>{% endblock %}
+
 {% block content %}
-{% if recipe.author == request.user %}
-<div class="author-panel">
-    <a href="{% url 'recipe-publish' recipe.slug %}" class="button publish-button{% if recipe.is_published %} unpublish{% endif %}">{% if recipe.is_published %}Снять с публикации{% else %}Опубликовать{% endif %}</a>
-    <a href="{% url 'recipe-edit' recipe.slug %}" class="button edit-button">Редактировать</a>
-    <a href="{% url 'recipe-remove' recipe.slug %}" class="button remove-button">Удалить</a>
-</div>
-{% if not recipe.is_published %}
-<div class="draft-label">
-    <span style="color: darkred;">Черновик</span>
-</div>
-{% endif %}
-{% endif %}
 <div class="recipe-detail">
-    <div id="creation-date">{{ recipe.creation_date|date:"d.m.Y" }}</div>
-    <div class="title">
-        <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}" width="250" height="250">
-        <span class="menu">{{ recipe.menu.name }}</span>
-        <span class="cuisine">{{ recipe.cuisine.name }}</span>
-        {% if not recipe.author == user %}
-        <span>{% include './includes/favorite_form.html' %}</span>
-        {% endif %}
-        <h1>{{ recipe.title }}</h1>
-        <span class="description">{{ recipe.description }}</span>
-        {% include './includes/cooking_time.html' %}
-        <div class="author-info">
-            {% if recipe.author.photo %}
-            <img src="{{ recipe.author.photo.url }}" width="50" height="50">
-            {% else %}
-            {% include 'accounts/includes/default_user_photo.html' %}
-            {% endif %}
-            <span>{{ recipe.author.get_full_name }}</span>
-        </div>
+    {% if recipe.author == request.user %}
+    <div class="author-panel">
+        <a href="{% url 'recipe-publish' recipe.slug %}" class="publish-button{% if recipe.is_published %} unpublish{% endif %}">{% if recipe.is_published %}Снять с публикации{% else %}Опубликовать{% endif %}</a>
+        <a href="{% url 'recipe-edit' recipe.slug %}" class="edit-button">Редактировать</a>
+        <a href="{% url 'recipe-remove' recipe.slug %}" class="remove-button">Удалить</a>
     </div>
+    {% endif %}
+
+    <div class="recipe-info">
+        <div class="cover-wrapper">
+            <img src="{{ recipe.image.url }}" width="250" height="250">
+        </div>
+        <div class="author unselectable">{% include './includes/author_label.html' %}</div>
+        <div class="menu-cuisine unselectable">{{ recipe.menu.name }} &#8226; {{ recipe.cuisine.name }}</div>
+        {% if not recipe.is_published %}
+        {% include './includes/draft_label.html' %}
+        {% endif %}
+        <div class="creation-date unselectable">{{ recipe.creation_date|date:"d.m.Y" }}</div>
+        <div class="title">{{ recipe.title }}</div>
+        <div class="cooking-time unselectable">{% include './includes/cooking_time.html' %}</div>
+        <div class="favorite unselectable">
+            {% include './includes/favorite_form.html' %}
+        </div>
+        <div class="description">{{ recipe.description | safe | linebreaks }}</div>
+    </div>
+
     <div class="ingredients-list">
-        <h3>Ингредиенты</h3>
+        <span class="subtitle">Ингредиенты</span>
         <ul>
             {% for ingredient in recipe.recipeingredient_set.all %}
             <li>
@@ -47,19 +42,23 @@
             {% endfor %}
         </ul>
     </div>
-    <div>
-        <h3>Пошаговый рецепт</h3>
-        <ul>
-            {% for step in recipe.recipestep_set.all %}
-            <li>
-                <img src="{{ step.image.url }}" width="100" height="100">
-                <span>{{ step.description }}</span>
-            </li>
-            {% endfor %}
-        </ul>
+
+    <div class="steps-list">
+        <span class="subtitle">Пошаговый рецепт</span>
+        <div class="steps-wrapper">
+        {% for step in recipe.recipestep_set.all %}
+            <div class="step">
+                <div class="cover-wrapper">
+                    <img src="{{ step.image.url }}" width="100" height="100">
+                </div>
+                <span>{{ step.description | safe | linebreaks }}</span>
+            </div>
+        {% endfor %}
+        </div>
     </div>
 </div>
 {% endblock %}
+
 {% block footer_scripts %}
 {% include './includes/favorite_script.html' %}
 {% endblock %}

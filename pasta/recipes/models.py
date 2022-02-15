@@ -34,7 +34,7 @@ class Recipe(models.Model):
     menu = models.ForeignKey('Menu', on_delete=models.SET_NULL, null=True, verbose_name='Меню')
     cooking_time = models.TimeField(null=True, verbose_name='Время приготовления')
     image = models.ImageField(upload_to='recipes/recipe/', verbose_name='Фотография готового блюда')
-    description = models.TextField(verbose_name='Описание блюда')
+    description = models.TextField(max_length=1000, verbose_name='Описание блюда')
     author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, blank=True, verbose_name='Автор')
     is_published = models.BooleanField(blank=True, default=0, verbose_name='Опубликован')
     creation_date = models.DateField(verbose_name='Дата создания', auto_now_add=True, blank=True, editable=False)
