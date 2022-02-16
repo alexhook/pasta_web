@@ -2,29 +2,28 @@
 body
 {
 	background-color: #cccccc;
-    /* display: flex;
+    display: flex;
     flex-wrap: wrap;
-    justify-content: center;
-    min-height: 100vh; */
-    /* flex-direction: column; */
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
 }
-/* TODO set min-height to 100% */
 .content-frame 
 {
     display: flex;
     flex-wrap: wrap;
-    position: absolute;
-    top: 0;
-    left: 10%;
-    min-height: 100%;
     max-width: 1200px;
     width: 80%;
     justify-content: center;
     background-color: #ffffff;
     padding: 95px 0 20px 0;
+    flex: 1 0 auto;
 }
 .content
 {
+    display: flex;
+    flex-direction: column;
     position: relative;
     width: 95%;
     background-color: #ffffff;
@@ -116,6 +115,10 @@ li
 {
     list-style-type: none;
 }
+a
+{
+    text-decoration: none;
+}
 
 
 /* header styles */
@@ -159,7 +162,6 @@ header .navigation li
 }
 header .navigation li a
 {
-    text-decoration: none;
     color: #222222;
 }
 header .applinks li a
@@ -273,7 +275,6 @@ header .usertools li a
 {
     font-size: 2.2em;
     color: #303030;
-    text-decoration: none;
 }
 .recipe-preview .title a:hover
 {
@@ -313,29 +314,58 @@ header .usertools li a
 }
 .author-panel a
 {
+    display: inline-block;
     margin: 0 .2% 0 .2%;
     padding: 0.5% 1% 0.5% 1%;
-    border-radius: 20px;
-    text-decoration: none;
+    border-radius: 8px;
     color: rgb(236, 236, 236);
-
+    transition: .2s all;
 }
 .author-panel a.publish-button
 {
     border: solid rgb(56, 56, 56);
-    color: rgb(51, 51, 51);
+    color: rgb(56, 56, 56);
+
+}
+.author-panel a.publish-button:hover
+{
+    color: white;
+    background-color: rgb(56, 56, 56);
+
+}
+.author-panel a.to-publish
+{
+    border: solid rgb(39, 131, 54);
+    background-color: rgb(39, 131, 54);
+    color: white;
+}
+.author-panel a.to-publish:hover
+{
+    background-color: white;
+    color: rgb(39, 131, 54);
 
 }
 .author-panel a.edit-button
 {
-    border: solid rgb(46, 155, 64);
-    background-color: rgb(46, 155, 64);
+    border: solid rgb(56, 56, 56);
+    color: rgb(56, 56, 56);
+
+}
+.author-panel a.edit-button:hover
+{
+    color: white;
+    background-color: rgb(56, 56, 56);
 
 }
 .author-panel a.remove-button
 {
     border: solid rgb(179, 54, 54);
+    color: rgb(179, 54, 54);
+}
+.author-panel a.remove-button:hover
+{
     background-color: rgb(179, 54, 54);
+    color: white;
 
 }
 
@@ -350,7 +380,7 @@ header .usertools li a
     align-items: center;
     justify-items: center;
     font-family: Georgia;
-    margin: 1% 0 3% 0;
+    margin: 1% 0 5% 0;
     letter-spacing: .038em;
 }
 .recipe-info .cover-wrapper
@@ -369,9 +399,41 @@ header .usertools li a
 {
     grid-column: 1 / 4;
     grid-row: 7;
-    padding:  3% 0 0 6%;
     align-self: start;
-    font-size: 1.1em;
+    justify-items: center;
+    font-size: 1em;
+    grid-template-rows: repeat(2, 1fr);
+}
+.recipe-info .author img
+{
+    grid-row: 2;
+    grid-column: 2;
+}
+.recipe-info .author span
+{
+    grid-row: 2;
+    grid-column: 3 / 9;
+    justify-self: start;
+    margin-left: 5%;
+}
+.recipe-info .author .author-label
+{
+    grid-column: 1 / 9;
+    grid-row: 1;
+    display: flex;
+    flex-direction: row;
+    margin-top: 15px;
+}
+.recipe-info .author .author-label .line
+{
+    border-bottom: solid #727272 1px;
+    margin: 0 0 6px 0;
+    width: 9vw;
+}
+.recipe-info .author .author-label #label
+{
+    margin: 0 5%;
+    color: #727272;
 }
 .recipe-info .menu-cuisine
 {
@@ -434,8 +496,6 @@ header .usertools li a
     max-width: 500px;
     border-radius: 20px;
     margin: 25px 0;
-
-    /* background-color: #e7d36349; */
 }
 .ingredients-list li
 {
@@ -449,6 +509,10 @@ header .usertools li a
 {
     grid-column: 1;
 }
+.ingredients-list .ingredient a
+{
+    color: #222222;
+}
 .ingredients-list .line
 {
     grid-column: 2;
@@ -458,6 +522,7 @@ header .usertools li a
 .ingredients-list .amount
 {
     grid-column: 3;
+    color: #222222;
 }
 
 /* steps-list block */
@@ -496,4 +561,100 @@ header .usertools li a
     letter-spacing: .02em;
     line-height: 1.7;
     padding-top: 20px;
+}
+
+
+/* footer styles */
+footer
+{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    width: 100%;
+    height: 80px;
+    background-color: #222222;
+    align-items: center;
+    position: relative;
+    bottom: 0%;
+    flex-shrink: 0;
+    box-shadow: 0 -10px 15px 0px rgb(231, 231, 231);
+    z-index: 10;
+}
+footer .logo
+{
+    grid-column: 2;
+    justify-self: center;
+    font-size: 1.5em;
+    letter-spacing: .5em;
+    font-weight: bold;
+    color: #f5f5f5;
+}
+footer .github-link
+{
+    grid-column: 3;
+    justify-self: end;
+    margin-right: 1.5vw;
+}
+footer .github-link a
+{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+footer .github-link img
+{
+    height: 100%;
+}
+footer .github-link #github-logo
+{
+    width: 60px;
+}
+footer .github-link #github-oct
+{
+    width: 35px;
+}
+
+
+/* messages styles */
+div .messages
+{
+    display: grid;
+    grid-template-columns: minmax(50px, 350px);
+    align-self: end;
+    margin: 10px 2% 10px 0;
+    padding: 0;
+    font-size: 1.02em;
+}
+div.messages div
+{
+    grid-column: 1;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: start;
+    margin: 4px 0;
+    padding: 5px 3%;
+    border-radius: 2px;
+    max-width: 400px;
+    min-width: min-content;
+    color: #424242;
+    background-color: #d8d8d8c4;
+}
+div.messages div i
+{
+    margin: 0 5% 0 2%;
+}
+div.messages div.success
+{
+    color: #237800;
+    background-color: #a3d23ec4;
+}
+div.messages div.info
+{
+    color: #003d89eb;
+    background-color: #7ec3dad6;
+}
+div.messages div.error
+{
+    color: #990008f2;
+    background-color: #d68c8ccc;
 }

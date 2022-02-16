@@ -57,7 +57,7 @@ class RecipeDetailView(generic.DetailView):
     model = Recipe
 
     def get_object(self):
-        recipe = Recipe.objects.select_related('cuisine', 'menu', 'author').prefetch_related('recipeingredient_set__ingredient', 'recipeingredient_set__unit','recipestep_set').filter(slug=self.kwargs.get('slug'))
+        recipe = Recipe.objects.select_related('cuisine', 'menu', 'author').prefetch_related('recipeingredient_set__ingredient', 'recipeingredient_set__ingredient__group', 'recipeingredient_set__unit','recipestep_set').filter(slug=self.kwargs.get('slug'))
         if not recipe.exists():
             raise Http404
         recipe = recipe.first()

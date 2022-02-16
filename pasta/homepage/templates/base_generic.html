@@ -56,13 +56,24 @@
     <div class="content">
       {% block messages %}
       {% if messages %}
-      <ul class="messages">
-          {% for message in messages %}
-          <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
-              {{ message }}
-          </li>
-          {% endfor %}
-      </ul>
+      <div class="messages">
+        {% for message in messages %}{% if message.tags %}
+        <div class="{{ message.tags }}">
+          {% if message.tags == 'success' %}
+          <i class="fa fa-check"></i>
+          {% elif message.tags == 'info' %}
+          <i class="fa fa-info-circle"></i>
+          {% elif message.tags == 'error' %}
+          <i class="fa fa-times-circle"></i>
+          {% endif %}
+          {{ message }}
+        </div>
+          {% else %}
+        <div>
+          {{ message }}
+        </div>
+        {% endif %}{% endfor %}
+      </div>
       {% endif %}
       {% endblock %}
       {% block content %}{% endblock %}
@@ -87,7 +98,17 @@
       {% endblock %}
     </div>
   </div>
-  {% block footer %}{% endblock %}
+  {% block footer %}
+  <footer>
+    <div class="logo unselectable" title="made by Alexander Maximenyuk">PASTA</div>
+    <div class="github-link">
+      <a href="https://github.com/alexhook/pasta_web.git">
+        <img src="/media/img/github-logo.png" id="github-logo">
+        <img src="/media/img/github-oct.png" id="github-oct">
+      </a>
+    </div>
+  </footer>
+  {% endblock %}
   {% block footer_scripts %}{% endblock %}
 </body>
 </html>

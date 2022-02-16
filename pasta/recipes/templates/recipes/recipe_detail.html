@@ -6,7 +6,7 @@
 <div class="recipe-detail">
     {% if recipe.author == request.user %}
     <div class="author-panel">
-        <a href="{% url 'recipe-publish' recipe.slug %}" class="publish-button{% if recipe.is_published %} unpublish{% endif %}">{% if recipe.is_published %}Снять с публикации{% else %}Опубликовать{% endif %}</a>
+        <a href="{% url 'recipe-publish' recipe.slug %}" class="publish-button{% if not recipe.is_published %} to-publish{% endif %}">{% if recipe.is_published %}Снять с публикации{% else %}Опубликовать{% endif %}</a>
         <a href="{% url 'recipe-edit' recipe.slug %}" class="edit-button">Редактировать</a>
         <a href="{% url 'recipe-remove' recipe.slug %}" class="remove-button">Удалить</a>
     </div>
@@ -16,7 +16,14 @@
         <div class="cover-wrapper">
             <img src="{{ recipe.image.url }}" width="250" height="250">
         </div>
-        <div class="author unselectable">{% include './includes/author_label.html' %}</div>
+        <div class="author unselectable">
+            <div class="author-label">
+                <span class="line"></span>
+                <span id="label">Автор</span>
+                <span class="line"></span>
+            </div>
+            {% include './includes/author_label.html' %}
+        </div>
         <div class="menu-cuisine unselectable">{{ recipe.menu.name }} &#8226; {{ recipe.cuisine.name }}</div>
         {% if not recipe.is_published %}
         {% include './includes/draft_label.html' %}
@@ -35,7 +42,9 @@
         <ul>
             {% for ingredient in recipe.recipeingredient_set.all %}
             <li>
-                <span class="ingredient">{{ ingredient.ingredient.name }}</span>
+                <span class="ingredient">
+                    <a href="{% url 'ingredient-detail' group_slug=ingredient.ingredient.group.slug slug=ingredient.ingredient.slug %}">{{ ingredient.ingredient.name }}</a>
+                </span>
                 <span class="line"></span>
                 <span class="amount">{% if ingredient.amount %}{{ ingredient.amount }} {% endif %}{{ ingredient.unit.name }}</span>
             </li>
