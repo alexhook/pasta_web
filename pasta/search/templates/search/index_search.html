@@ -27,8 +27,8 @@
 <div class="ingredient-list-wrapper">
 {% include './includes/search_header_block.html' with title='Ингредиенты' list=ingredient_list %}
 <div class="ingredient-list">
-    {% for ingredient in ingredient_list|slice:":5" %}
-    {% include 'wiki/includes/ingredient_preview_block.html' %}
+    {% for instance in ingredient_list|slice:":5" %}
+    {% include 'wiki/includes/wiki_preview_block.html' %}
     {% endfor %}
     {% if ingredient_list.count > 5 %}
     <a href="{% url 'ingredient-search' %}?text={{ text|urlencode }}">Показать все</a>
@@ -41,8 +41,8 @@
 <div class="instrument-list-wrapper">
 {% include './includes/search_header_block.html' with title='Инструменты' list=instrument_list %}
 <div class="instrument-list">
-    {% for instrument in instrument_list|slice:":5" %}
-    {% include 'wiki/includes/instrument_preview_block.html' %}
+    {% for instance in instrument_list|slice:":5" %}
+    {% include 'wiki/includes/wiki_preview_block.html' %}
     {% endfor %}
     {% if instrument_list.count > 5 %}
     <a href="{% url 'instrument-search' %}?text={{ text|urlencode }}">Показать все</a>

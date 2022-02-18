@@ -1,0 +1,13 @@
+{% extends "base_generic.html" %}
+
+{% block title %}<title>Паста | {{ title }} | {{ instance.name }}</title>{% endblock %}
+
+{% block content %}
+<div class="info-block">
+    <div class="cover-wrapper">
+        <img src="{{ instance.image.url }}">
+    </div>
+    <div class="title">{{ instance.name }}</div>
+    <div class="description">{{ instance.description | safe | linebreaks }}</div>
+</div>
+{% endblock %}

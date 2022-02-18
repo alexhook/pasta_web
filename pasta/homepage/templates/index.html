@@ -22,13 +22,11 @@
             <a href="{% url 'ingredient-groups-list' %}">Показать все</a>
         </span>
         <div class="child-block-content">
-            {% if ingredient_list %}
-            {% for ingredient in ingredient_list %}
-            {% include 'wiki/includes/ingredient_preview_block.html' %}
-            {% endfor %}
-            {% else %}
+            {% for instance in ingredient_list %}
+            {% include 'wiki/includes/wiki_preview_block.html' %}
+            {% empty %}
             <span class="empty-info">Холодильник опустел. Пора наведаться в магазин.</span>
-            {% endif %}
+            {% endfor %}
         </div>
     </div>
     <div class="child-blocks" id="instruments-list">
@@ -38,13 +36,11 @@
             <a href="{% url 'instruments-list' %}">Показать все</a>
         </span>
         <div class="child-block-content">
-            {% if instrument_list %}
-            {% for instrument in instrument_list %}
-            {% include 'wiki/includes/instrument_preview_block.html' %}
-            {% endfor %}
-            {% else %}
+            {% for instance in instrument_list %}
+            {% include 'wiki/includes/wiki_preview_block.html' %}
+            {% empty %}
             <span class="empty-info">Мастерская закрыта. Инструменты все проданы. Приходите в другой раз.</span>
-            {% endif %}
+            {% endfor %}
         </div>
     </div>
 </div>

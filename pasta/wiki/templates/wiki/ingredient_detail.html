@@ -1,13 +1,1 @@
-{% extends "base_generic.html" %}
-
-{% block title %}<title>Паста | Ингредиенты | {{ ingredient.name }}</title>{% endblock %}
-
-{% block content %}
-<div>
-    <img src="{{ ingredient.image.url }}" width="100" height="100">
-    <div class="description">
-        <h2>{{ ingredient.name }}</h2>
-        <span>{{ ingredient.description | safe | linebreaks }}</span>
-    </div>
-</div>
-{% endblock %}
+{% include './includes/wiki_detail.html' with instance=ingredient title='Ингредиенты' %}

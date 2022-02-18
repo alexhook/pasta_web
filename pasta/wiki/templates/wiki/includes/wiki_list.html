@@ -1,0 +1,15 @@
+{% extends "base_generic.html" %}
+
+{% block title %}<title>Паста | {{ title }}</title>{% endblock %}
+
+{% block content %}
+{% block navigation_button %}{% endblock navigation_button %}
+{% block search_info %}{% endblock search_info %}
+<div class="wiki-list">
+    {% for instance in instance_list %}
+    {% include './wiki_preview_block.html' with instance=instance %}
+    {% empty %}
+    <h3>Не найдено ни одного {{ empty_label }}</h3>
+    {% endfor %}
+</div>
+{% endblock %}

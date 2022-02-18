@@ -1,0 +1,11 @@
+{% extends "base_generic.html" %}
+
+{% block title %}<title>Паста | Вики</title>{% endblock %}
+
+{% block content %}
+<div class="wiki-list group-list section-list">
+    {% for instance in instance_list %}
+    {% include './includes/wiki_preview_block.html' %}
+    {% endfor %}
+</div>
+{% endblock %}

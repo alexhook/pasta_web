@@ -2,6 +2,19 @@ from django.db import models
 from django.urls import reverse
 from pytils.translit import slugify
 
+
+class WikiSection(models.Model):
+    name = models.CharField(max_length=100, verbose_name='Наименование', unique=True)
+    image = models.ImageField(upload_to='wiki/wikisections/', verbose_name='Иллюстрация')
+
+    class Meta:
+        verbose_name = 'Раздел'
+        verbose_name_plural = 'Разделы'
+    
+    def __str__(self):
+        return self.name
+
+
 class IngredientGroup(models.Model):
     name = models.CharField(max_length=100, verbose_name='Наименование', unique=True)
     slug = models.SlugField(blank=True, unique=True)

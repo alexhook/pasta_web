@@ -1,0 +1,11 @@
+<div class="wiki-preview">
+    <a href="{{ instance.get_absolute_url }}">
+        <div class="cover-wrapper">
+            <img src="{{ instance.image.url }}">
+        </div>
+        <div class="title">{{ instance.name }}</div>
+        {% if instance.description %}
+        <div class="description">{{ instance.description|truncatewords:25 }}</div>
+        {% endif %}
+    </a>
+</div>

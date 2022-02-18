@@ -1,6 +1,7 @@
+from dataclasses import field
 from django.contrib import admin
 from django.contrib.admin.decorators import display
-from .models import IngredientGroup, Ingredient, Instrument
+from .models import WikiSection, IngredientGroup, Ingredient, Instrument
 
 @admin.register(IngredientGroup)
 class IngredientGroupAdmin(admin.ModelAdmin):
@@ -26,4 +27,10 @@ class InstrumentAdmin(admin.ModelAdmin):
     exclude = ['slug']
     list_display = ('name',)
     search_fields = ('name', 'slug',)
+    ordering = ('name',)
+
+@admin.register(WikiSection)
+class WikiSectionAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+    search_fields = ('name',)
     ordering = ('name',)

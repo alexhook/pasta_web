@@ -1,13 +1,1 @@
-{% extends "base_generic.html" %}
-
-{% block title %}<title>Паста | Инструменты</title>{% endblock %}
-
-{% block content %}
-{% block navigation_button %}{% endblock navigation_button %}
-{% block search_info %}{% endblock search_info %}
-{% for instrument in instrument_list %}
-{% include './includes/instrument_preview_block.html' %}
-{% empty %}
-<h3>Не найдено ни одного инструмента</h3>
-{% endfor %}
-{% endblock %}
+{% include './includes/wiki_list.html' with instance_list=instrument_list title='Инструменты' empty_label='инструмента' %}

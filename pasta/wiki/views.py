@@ -1,20 +1,40 @@
+from django.urls import reverse
 from django.shortcuts import get_object_or_404, render
 from django.http.request import HttpRequest
-from .models import IngredientGroup, Ingredient, Instrument
+from .models import WikiSection, IngredientGroup, Ingredient, Instrument
 from django.views import generic
 from django.http import Http404
 
 def index(request: HttpRequest):
+    sections = WikiSection.objects.all()
+    data = [
+        {
+            'name': 'Ингредиенты',
+            'get_absolute_url': reverse('ingredient-groups-list'),
+            'image': sections.get(name='Ингредиенты').image,
+        },
+        {
+            'name': 'Инструменты',
+            'get_absolute_url': reverse('instruments-list'),
+            'image': sections.get(name='Инструменты').image,
+        },
+    ]
     return render(
         request,
-        'wiki/wiki-index.html',
-        context={}
+        'wiki/wiki_index.html',
+        context={
+            'instance_list': data,
+        }
     )
 
 
 class IngredientGroupListView(generic.ListView):
     model = IngredientGroup
-    paginate_by = 15
+    paginate_by = 50
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.order_by('name')
 
 
 class IngredientListView(generic.ListView):

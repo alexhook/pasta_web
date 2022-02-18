@@ -8,6 +8,7 @@ body
     align-items: center;
     min-height: 100vh;
     margin: 0;
+    font-family: Georgia;
 }
 .content-frame 
 {
@@ -227,7 +228,6 @@ header .usertools li a
     grid-row-gap: 0.3em;
     grid-column-gap: 0.3em;
     align-items: center;
-    font-family: Georgia;
     margin: 2em 0 2em 0;
     max-width: 750px;
     letter-spacing: .038em;
@@ -369,8 +369,8 @@ header .usertools li a
 
 }
 
-/* recipe-info block */
-.recipe-info
+/* recipe-deatil info-block */
+.info-block
 {
     display: grid;
     grid-template-columns: repeat(9, 1fr);
@@ -383,19 +383,19 @@ header .usertools li a
     margin: 1% 0 5% 0;
     letter-spacing: .038em;
 }
-.recipe-info .cover-wrapper
+.info-block .cover-wrapper
 {
     grid-column: 1 / 4;
     grid-row: 1 / 7;
     width: 100%;
     height: 250px;
 }
-.recipe-info .cover-wrapper img
+.info-block .cover-wrapper img
 {
     width: 100%;
     height: 100%;
 }
-.recipe-info .author
+.info-block .author
 {
     grid-column: 1 / 4;
     grid-row: 7;
@@ -404,19 +404,19 @@ header .usertools li a
     font-size: 1em;
     grid-template-rows: repeat(2, 1fr);
 }
-.recipe-info .author img
+.info-block .author img
 {
     grid-row: 2;
     grid-column: 2;
 }
-.recipe-info .author span
+.info-block .author span
 {
     grid-row: 2;
     grid-column: 3 / 9;
     justify-self: start;
     margin-left: 5%;
 }
-.recipe-info .author .author-label
+.info-block .author .author-label
 {
     grid-column: 1 / 9;
     grid-row: 1;
@@ -424,34 +424,34 @@ header .usertools li a
     flex-direction: row;
     margin-top: 15px;
 }
-.recipe-info .author .author-label .line
+.info-block .author .author-label .line
 {
     border-bottom: solid #727272 1px;
     margin: 0 0 6px 0;
     width: 9vw;
 }
-.recipe-info .author .author-label #label
+.info-block .author .author-label #label
 {
     margin: 0 5%;
     color: #727272;
 }
-.recipe-info .menu-cuisine
+.info-block .menu-cuisine
 {
     grid-column: 4 / 7;
     grid-row: 1;
 }
-.recipe-info .draft-label
+.info-block .draft-label
 {
     grid-column: 7 / 9;
     grid-row: 1;
 }
-.recipe-info .creation-date
+.info-block .creation-date
 {
     grid-column: 9;
     grid-row: 1;
     color: #4d4d4d;
 }
-.recipe-info .title
+.info-block .title
 {
     grid-column: 4 / 10;
     grid-row: 2;
@@ -460,20 +460,20 @@ header .usertools li a
     padding-left: 5%;
     font-weight: bold;
 }
-.recipe-info .cooking-time
+.info-block .cooking-time
 {
     grid-column: 4 / 9;
     grid-row: 3;
     justify-self: start;
     padding-left: 10%;
 }
-.recipe-info .favorite
+.info-block .favorite
 {
     grid-column: 5 / 7;
     grid-row: 3;
     padding-right: 10%;
 }
-.recipe-info .description
+.info-block .description
 {
     grid-column: 4 / 10;
     grid-row: 4 / 8;
@@ -657,4 +657,107 @@ div.messages div.error
 {
     color: #990008f2;
     background-color: #d68c8ccc;
+}
+
+
+/* wiki_preview_block styles */
+.wiki-preview
+{
+    margin: 20px 1%;
+    max-width: 600px;
+}
+.wiki-preview a
+{
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: repeat(8, 25px) auto;
+}
+.wiki-preview .cover-wrapper
+{
+    grid-column: 1 / 6;
+    grid-row: 1 / 10;
+}
+.wiki-preview .cover-wrapper
+{
+    width: 100%;
+    height: 200px;
+}
+.wiki-preview .cover-wrapper img
+{
+    width: 100%;
+    height: 100%;
+}
+.wiki-preview .title
+{
+    grid-column: 7 / 13;
+    grid-row: 2;
+    font-size: 1.6em;
+    letter-spacing: .08em;
+    font-weight: 700;
+    padding: 0 1%;
+    color: #333333;
+}
+.wiki-preview .description
+{
+    grid-column: 6 / 13;
+    grid-row: 4 / 10;
+    margin-left: 6%;
+    padding: 0 1%;
+    color: #161616;
+}
+
+/* wiki_list styles */
+.group-list
+{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+.group-list .wiki-preview
+{
+    width: 200px;
+    margin: 0;
+}
+.group-list a
+{
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(10, 20px) 10px minmax(20px, auto) 10px;
+    align-items: center;
+    justify-items: center;
+}
+.group-list .cover-wrapper
+{
+    grid-column: 1;
+    grid-row: 1 / 11;
+    border-radius: 5px;
+}
+.group-list .title
+{
+    grid-column: 1;
+    grid-row: 12;
+    text-align: center;
+}
+.section-list
+{
+    height: 100%;
+    align-content: center;
+    justify-content: center;
+    gap: 30px;
+}
+.section-list .wiki-preview
+{
+    --cover-width: 525px;
+    --cover-height: calc(var(--cover-width)/(5/3));
+    width: var(--cover-width);
+}
+.section-list a
+{
+    grid-template-rows: repeat(10, calc(var(--cover-height)/10)) 10px minmax(20px, auto) 10px;
+}
+.section-list .cover-wrapper
+{
+    height: var(--cover-height);
 }

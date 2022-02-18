@@ -1,13 +1,1 @@
-{% extends "base_generic.html" %}
-
-{% block title %}<title>Паста | Инструменты | {{ instrument.name }}</title>{% endblock %}
-
-{% block content %}
-<div>
-    <img src="{{ instrument.image.url }}" width="100" height="100">
-    <div class="description">
-        <h2>{{ instrument.name }}</h2>
-        <span>{{ instrument.description | safe | linebreaks }}</span>
-    </div>
-</div>
-{% endblock %}
+{% include './includes/wiki_detail.html' with instance=instrument title='Инструменты' %}
