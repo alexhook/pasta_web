@@ -22,7 +22,7 @@
                 <span id="label">Автор</span>
                 <span class="line"></span>
             </div>
-            {% include './includes/author_label.html' %}
+            {% include './includes/author_label.html' with instance=recipe %}
         </div>
         <div class="menu-cuisine unselectable">{{ recipe.menu.name }} &#8226; {{ recipe.cuisine.name }}</div>
         {% if not recipe.is_published %}
@@ -30,9 +30,9 @@
         {% endif %}
         <div class="creation-date unselectable">{{ recipe.creation_date|date:"d.m.Y" }}</div>
         <div class="title">{{ recipe.title }}</div>
-        <div class="cooking-time unselectable">{% include './includes/cooking_time.html' %}</div>
+        <div class="cooking-time unselectable">{% include './includes/cooking_time.html' with instance=recipe %}</div>
         <div class="favorite unselectable">
-            {% include './includes/favorite_form.html' %}
+            {% include './includes/favorite_form.html' with instance=recipe %}
         </div>
         <div class="description">{{ recipe.description | safe | linebreaks }}</div>
     </div>

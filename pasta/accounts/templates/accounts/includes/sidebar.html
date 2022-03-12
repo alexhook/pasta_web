@@ -1,6 +1,15 @@
-<ul>
-    <li><a href="{% url 'change-personal-info' %}">Профиль</a></li>
-    <li><a href="{% url 'password-change' %}">Изменить пароль</a></li>
-    <li><a href="{% url 'myrecipes' %}">Мои рецепты</a></li>
-    <li><a href="{% url 'favorites' %}">Избранное</a></li>
-</ul>
+{% load active_link_tags %}
+<ul class="nav nav-tabs mb-4">
+    <li class="nav-item">
+      <a class="nav-link {% active_link 'change-personal-info' %}" href="{% url 'change-personal-info' %}">Профиль</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link {% active_link 'password-change' %}" href="{% url 'password-change' %}">Изменить пароль</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link {% active_link 'myrecipes' %}" href="{% url 'myrecipes' %}">Мои рецепты</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link {% active_link 'favorites' %}" href="{% url 'favorites' %}">Избранное</a>
+    </li>
+  </ul>

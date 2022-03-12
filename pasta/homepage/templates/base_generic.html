@@ -5,51 +5,58 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   {% load static %}
-  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
   <link rel="stylesheet" href="{% static 'font_awesome/css/all.css' %}">
+  <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
   <link rel="icon" type="image/x-icon" href="/media/img/logo.png">
   {% block header_scripts %}{% endblock %}
 </head>
 <body>
   {% block header %}
   <header>
-      <a class="logo" href="{% url 'index' %}">
+    <div class="nav-items" id="nav-logo">
+      <a href="{% url 'index' %}">
         <img src="/media/img/logo.png">
       </a>
-      <ul class="navigation applinks">
+    </div>
+    <div class="nav-items" id="nav-applinks">
+      <ul>
         <li><a href="{% url 'recipe-list' %}">РЕЦЕПТЫ</a></li>
         <li><a href="{% url 'wiki' %}">ВИКИ</a></li>
       </ul>
+    </div>
+    <div class="nav-items" id="nav-search">
       {% block search_form %}
       {% include 'search/includes/search_box_block.html' %}
       {% endblock search_form %}
-      <ul class="navigation usertools">
+    </div>
+    <div class="nav-items" id="nav-usertools">
+      <ul>
         {% if user.is_authenticated %}
-        <div>
-          <li><a href="/admin/">Админ</a></li>
-          <!-- <i class="fa fa-bookmark" aria-hidden="true"></i> -->
-        </div>
-        <div>
-          <li><a href="{% url 'favorites' %}">Избранное</a></li>
-          <!-- <i class="fa fa-bookmark" aria-hidden="true"></i> -->
-        </div>
-        <div>
-          <li><a href="{% url 'recipe-create' %}">Добавить рецепт</a></li>
-          <!-- <i class="fa fa-plus" aria-hidden="true"></i> -->
-        </div>
-        <div>
-          <li><a href="{% url 'profile-index' %}">Личный кабинет</a></li>
-        </div>
-        <div>
-          <li><a href="{% url 'logout' %}"><i class="fa fa-times" aria-hidden="true"></i></a></li>
-        </div>
+        <li>
+          <a href="/admin/">Админ</a>
+        </li>
+        <li>
+          <a href="{% url 'favorites' %}">Избранное</a>
+        </li>
+        <li>
+          <a href="{% url 'recipe-create' %}">Добавить рецепт</a>
+        </li>
+        <li>
+          <a href="{% url 'profile-index' %}">Личный кабинет</a>
+        </li>
+        <li>
+          <a href="{% url 'logout' %}">
+            <i class="fa fa-times" aria-hidden="true"></i>
+          </a>
+        </li>
         {% else %}
-        <div>
-          <li><a href="{% url 'login' %}">Войти</a></li>
-          <!-- <i class="fa fa-user-o" aria-hidden="true"></i> -->
-        </div>
+        <li>
+          <a href="{% url 'login' %}">Войти</a>
+        </li>
         {% endif %}
       </ul>
+    </div>
   </header>
   {% endblock header %}
   <div class="content-frame">
@@ -109,6 +116,7 @@
     </div>
   </footer>
   {% endblock %}
+  <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
   {% block footer_scripts %}{% endblock %}
 </body>
 </html>

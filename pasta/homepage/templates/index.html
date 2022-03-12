@@ -1,49 +1,44 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-<div class="main-blocks" id="recipes-block">
-    <h2>РЕЦЕПТЫ</h2>
-    <div class="child-blocks" id="recipes-list">
-        {% if recipe_list %}
-        {% for recipe in recipe_list %}
-        {% include 'recipes/includes/recipe_preview_block.html' %}
-        {% endfor %}
-        {% else %}
-        <span class="empty-info">Кажется наши повара объелись белены и не составили ещё ни одного рецепта. Приносим свои извинения.</span>
-        {% endif %}
+
+<div class="main-block">
+    <div class="hp-title">
+        <a href="{% url 'recipe-list' %}">РЕЦЕПТЫ</a>
     </div>
+    {% with template_path='recipes/includes/recipe_preview_block.html' %}
+
+    {% with instance_list=recipe_list %}
+    {% with empty_msg='Кажется наши повара объелись белены и не составили ещё ни одного рецепта. Приносим свои извинения.' %}
+    {% include './includes/content_block.html' %}
+    {% endwith %}{% endwith %}
+
+    {% endwith %}
 </div>
-<div class="main-blocks" id="wiki-block">
-    <h2>ВИКИ</h2>
-    <div class="child-blocks" id="ingredients-list">
-        <span class="child-title">
-            <span class="child-title-text">Ингредиенты</span>
-            <span> | </span>
-            <a href="{% url 'ingredient-groups-list' %}">Показать все</a>
-        </span>
-        <div class="child-block-content">
-            {% for instance in ingredient_list %}
-            {% include 'wiki/includes/wiki_preview_block.html' %}
-            {% empty %}
-            <span class="empty-info">Холодильник опустел. Пора наведаться в магазин.</span>
-            {% endfor %}
-        </div>
+
+<div class="main-block">
+    <div class="hp-title">
+        <a href="{% url 'wiki' %}">ВИКИ</a>
     </div>
-    <div class="child-blocks" id="instruments-list">
-        <span class="child-title">
-            <span class="child-title-text">Инструменты</span>
-            <span> | </span>
-            <a href="{% url 'instruments-list' %}">Показать все</a>
-        </span>
-        <div class="child-block-content">
-            {% for instance in instrument_list %}
-            {% include 'wiki/includes/wiki_preview_block.html' %}
-            {% empty %}
-            <span class="empty-info">Мастерская закрыта. Инструменты все проданы. Приходите в другой раз.</span>
-            {% endfor %}
-        </div>
-    </div>
+    {% with template_path='wiki/includes/wiki_preview_block.html' %}
+
+    {% with subtitle='Ингредиенты' %}
+    {% with subtitle_url='ingredient-groups-list' %}
+    {% with instance_list=ingredient_list %}
+    {% with empty_msg='Холодильник опустел. Пора наведаться в магазин.' %}
+    {% include './includes/content_block.html' %}
+    {% endwith %}{% endwith %}{% endwith %}{% endwith %}
+
+    {% with subtitle='Инструменты' %}
+    {% with subtitle_url='instruments-list' %}
+    {% with instance_list=instrument_list %}
+    {% with empty_msg='Мастерская закрыта. Инструменты все проданы. Приходите в другой раз.' %}
+    {% include './includes/content_block.html' %}
+    {% endwith %}{% endwith %}{% endwith %}{% endwith %}
+
+    {% endwith %}
 </div>
+
 {% endblock %}
 {% block footer_scripts %}
 {% include 'recipes/includes/favorite_script.html' %}

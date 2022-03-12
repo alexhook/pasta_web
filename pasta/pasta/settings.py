@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     # 'debug_toolbar',
     'django_extensions',
     'django_select2',
+    'active_link',
 ]
 
 MIDDLEWARE = [

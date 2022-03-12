@@ -1,6 +1,6 @@
-{% if recipe.author.photo %}
-<img src="{{ recipe.author.photo.url }}">
+{% if instance.author.photo %}
+<img src="{{ instance.author.photo.url }}">
 {% else %}
 {% include 'accounts/includes/default_user_photo.html' %}
 {% endif %}
-<span>{{ recipe.author.get_full_name }}</span>
+<span>{{ instance.author.get_full_name }}</span>

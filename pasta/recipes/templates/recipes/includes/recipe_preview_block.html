@@ -1,11 +1,11 @@
 <div class="recipe-preview">
     <div class="cover-wrapper">
-        <a href="{{ recipe.get_absolute_url }}">
-            <img src="{{ recipe.image.url }}">
+        <a href="{{ instance.get_absolute_url }}">
+            <img src="{{ instance.image.url }}">
         </a>
     </div>
-    {% if recipe.author == user %}
-    {% if not recipe.is_published %}
+    {% if instance.author == user %}
+    {% if not instance.is_published %}
     {% include './draft_label.html' %}
     {% else %}
     <div class="owner-label unselectable">
@@ -13,8 +13,8 @@
         <span>Ваш рецепт</span>
     </div>
     {% endif %}{% endif %}
-    <div class="menu-cuisine unselectable">{{ recipe.menu.name }} &#8226; {{ recipe.cuisine.name }}</div>
-    <div class="title"><a href="{{ recipe.get_absolute_url }}">{{ recipe.title }}</a></div>
+    <div class="menu-cuisine unselectable">{{ instance.menu.name }} &#8226; {{ instance.cuisine.name }}</div>
+    <div class="title"><a href="{{ instance.get_absolute_url }}">{{ instance.title }}</a></div>
     <div class="cooking-time unselectable">{% include './cooking_time.html' %}</div>
     <div class="author unselectable">{% include './author_label.html' %}</div>
     <div class="favorite unselectable">

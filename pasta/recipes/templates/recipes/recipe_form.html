@@ -8,95 +8,114 @@
 
 {% block content %}
 
-<form action="" method="post" enctype="multipart/form-data">
+<form action="" method="post" enctype="multipart/form-data" class="recipe-form">
     {% csrf_token %}
-    
     {{ recipe_form.author.as_hidden }}
     {{ recipe_form.slug.as_hidden }}
-    <div class="fieldWrapper">
-        {{ recipe_form.title.errors }}
-        {{ recipe_form.title.label_tag }}
-        {{ recipe_form.title }}
-    </div>
-    <div class="fieldWrapper">
-        {{ recipe_form.cuisine.errors }}
-        {{ recipe_form.cuisine.label_tag }}
-        {{ recipe_form.cuisine }}
-    </div>
-    <div class="fieldWrapper">
-        {{ recipe_form.menu.errors }}
-        {{ recipe_form.menu.label_tag }}
-        {{ recipe_form.menu }}
-    </div>
-    <div class="fieldWrapper">
-        {{ recipe_form.cooking_time.errors }}
-        {{ recipe_form.cooking_time.label_tag }}
-        {{ recipe_form.cooking_time }}
-    </div>
-    <div class="fieldWrapper">
-        {{ recipe_form.image.errors }}
-        {{ recipe_form.image.label_tag }}
-        {% if recipe_form.instance.image %}
-        <br>
-        <img src="{{ recipe_form.instance.image.url }}" width="200" height="200">
-        {% endif %}
-        {{ recipe_form.image }}
-    </div>
-    <div class="fieldWrapper">
-        {{ recipe_form.description.errors }}
-        {{ recipe_form.description.label_tag }}
-        {{ recipe_form.description }}
+
+    <div class="form-block" id="rcp">
+        <div class="items-wrapper" id="cvr-wrapper">
+            <div class="block-items" id="img-item">
+                <div class="cover-wrapper">
+                    {% if recipe_form.instance.image %}
+                    <img src="{{ recipe_form.instance.image.url }}" width="200" height="200">
+                    {% else %}
+                    {% include './includes/default_recipe_img.html' %}
+                    {% endif %}
+                </div>
+                {{ recipe_form.image }}
+                {{ recipe_form.image.errors }}
+            </div>
+        </div>
+        <div class="items-wrapper" id="othr-wrapper">
+            <div class="block-items" id="title-item">
+                {% comment %}{{ recipe_form.title.label_tag }}{% endcomment %}
+                {{ recipe_form.title }}
+                {{ recipe_form.title.errors }}
+            </div>
+            <div class="block-items" id="cuisine-item">
+                {{ recipe_form.cuisine.label_tag }}
+                {{ recipe_form.cuisine }}
+                {{ recipe_form.cuisine.errors }}
+            </div>
+            <div class="block-items" id="menu-item">
+                {{ recipe_form.menu.label_tag }}
+                {{ recipe_form.menu }}
+                {{ recipe_form.menu.errors }}
+            </div>
+            <div class="block-items" id="ct-item">
+                {{ recipe_form.cooking_time.label_tag }}
+                {{ recipe_form.cooking_time }}
+                {{ recipe_form.cooking_time.errors }}
+            </div>
+            <div class="block-items" id="desc-item">
+                {{ recipe_form.description }}
+                {{ recipe_form.description.errors }}
+            </div>
+        </div>
     </div>
     
-    <h3>Ингредиенты</h3>
-    <div id="ingredients-form">
+    <div class="form-block" id="ing-block">
+        <h3>Ингредиенты</h3>
         {% for error in ingredient_formset.non_form_errors %}
         <span class="errors">{{ error }}</span>
         {% endfor %}
-        {% for form in ingredient_formset %}
-        <div class="ingredient" {% if form.DELETE.value %}hidden="hidden"{% endif %}>
-            {{ form.id }}
-            {{ form.ingredient }}
-            {{ form.amount }}
-            {{ form.unit }}
-            {{ form.DELETE.as_hidden }}
-            <i class="fa fa-times delete-form" aria-hidden="true"></i>
-            {% if form.errors %}
-            <span class="errors">Заполните поля или удалите их.</span>
-            {% endif %}
+        <div class="block-items" id="ing-items">
+            {% for form in ingredient_formset %}
+            <div class="ingredient removable-item" {% if form.DELETE.value %}hidden="hidden"{% endif %}>
+                {{ form.id }}
+                {{ form.ingredient }}
+                {{ form.amount }}
+                {{ form.unit }}
+                {{ form.DELETE.as_hidden }}
+                <i class="fa fa-times delete-form" aria-hidden="true"></i>
+                {% if form.errors %}
+                <span class="errors">Заполните поля или удалите их.</span>
+                {% endif %}
+            </div>
+            {% endfor %}
         </div>
-        {% endfor %}
+        {{ ingredient_formset.management_form }}
+        <span class="btn btn-success btn-sm" id="add-ing-btn">Добавить ингредиент</span>
     </div>
-    {{ ingredient_formset.management_form }}
-    <span id="add_ingredient">Добавить ингредиент</span>
 
-    <h3>Шаги</h3>
-    <div id="steps-form">
+    <div class="form-block" id="stp-block">
+        <h3>Шаги</h3>
         {% for error in step_formset.non_form_errors %}
         <span class="errors">{{ error }}</span>
         {% endfor %}
-        {% for form in step_formset %}
-        <div class="step" {% if form.DELETE.value %}hidden="hidden"{% endif %}>
-            {{ form.id }}
-            {% if form.instance.image %}
-            <img src="{{ form.instance.image.url }}" width="100" height="100">
-            {% endif %}
-            {{ form.image }}
-            {{ form.description }}
-            {{ form.DELETE.as_hidden }}
-            <i class="fa fa-times delete-form" aria-hidden="true"></i>
-            {% if form.errors %}
-            <span class="errors">Заполните поля или удалите их.</span>
-            {% endif %}
+        <div class="block-items" id="stp-items">
+            {% for form in step_formset %}
+            <div class="step removable-item" {% if form.DELETE.value %}hidden="hidden"{% endif %}>
+                {{ form.id }}
+                <div class="img-wrapper">
+                    <div class="cover-wrapper">
+                        {% if form.instance.image %}
+                        <img src="{{ form.instance.image.url }}">
+                        {% else %}
+                        {% include './includes/default_step_img.html' %}
+                        {% endif %}
+                    </div>
+                    {{ form.image }}
+                </div>
+                <div class="othr-wrapper">
+                    {{ form.description }}
+                    {{ form.DELETE.as_hidden }}
+                    <span class="btn btn-danger btn-sm delete-form">Удалить</span>
+                    {% if form.errors %}
+                    <span class="errors">Заполните поля или удалите их.</span>
+                {% endif %}
+                </div>
+            </div>
+            {% endfor %}
         </div>
-        {% endfor %}
+        {{ step_formset.management_form }}
+        <span class="btn btn-success btn-sm" id="add-stp-btn">Добавить шаг</span>
     </div>
-    {{ step_formset.management_form }}
-    <span id="add_step">Добавить шаг</span>
 
-    <div>
-        <input type="submit" name="submit-save" value="Сохранить">
-        <input type="submit" name="submit-publish" value="Опубликовать">
+    <div class="form-block" id="btns-block">
+        <input type="submit" name="submit-save" value="Сохранить" class="btn btn-secondary">
+        <input type="submit" name="submit-publish" value="Опубликовать" class="btn btn-primary">
     </div>
 
 </form>
@@ -109,10 +128,10 @@
 var ingredient_form_count = {{ ingredient_formset.total_form_count }};
 var step_form_count = {{ step_formset.total_form_count }};
 
-$('#add_ingredient').click(function() {
+$('#add-ing-btn').click(function() {
     if ({{ ingredient_formset.absolute_max }} > ingredient_form_count) {
         var new_form = (
-            '<div class="ingredient">' +
+            '<div class="ingredient removable-item">' +
             '{{ ingredient_formset.empty_form.ingredient|escapejs }} ' +
             '{{ ingredient_formset.empty_form.amount|escapejs }} ' +
             '{{ ingredient_formset.empty_form.unit|escapejs }} ' +
@@ -120,30 +139,37 @@ $('#add_ingredient').click(function() {
             '<i class="fa fa-times delete-form" aria-hidden="true"></i>' +
             '</div>'
         ).replace(/__prefix__/g, ingredient_form_count);
-        $('#ingredients-form').append(new_form);
+        $('#ing-items').append(new_form);
         ingredient_form_count++;
         $('#id_ingredient-TOTAL_FORMS').val(ingredient_form_count);
     };
 });
 
-$('#add_step').click(function() {
+$('#add-stp-btn').click(function() {
     if ({{ step_formset.absolute_max }} > step_form_count) {
         var new_form = (
-            '<div class="step">' +
-            '{{ step_formset.empty_form.image|escapejs }} ' +
-            '{{ step_formset.empty_form.description|escapejs }} ' +
-            '{{ step_formset.empty_form.DELETE.as_hidden|escapejs }} ' +
-            '<i class="fa fa-times delete-form" aria-hidden="true"></i>' +
+            '<div class="step removable-item">' +
+            '   <div class="img-wrapper">' +
+            '       <div class="cover-wrapper">' +
+            '           {% include "./includes/default_step_img.html" %}' +
+            '       </div>' +
+            '       {{ step_formset.empty_form.image|escapejs }}' +
+            '   </div>' +
+            '   <div class="othr-wrapper">' +
+            '       {{ step_formset.empty_form.description|escapejs }}' +
+            '       {{ step_formset.empty_form.DELETE.as_hidden|escapejs }}' +
+            '       <span class="btn btn-danger btn-sm delete-form">Удалить</span>' +
+            '   </div>' +
             '</div>'
         ).replace(/__prefix__/g, step_form_count);
-        $('#steps-form').append(new_form);
+        $('#stp-items').append(new_form);
         step_form_count++;
         $('#id_step-TOTAL_FORMS').val(step_form_count);
     };
 });
 
-$('#ingredients-form, #steps-form').on('click', '.delete-form', function(){
-    let parrentDiv = $(this).closest('div');
+$('#ing-items, #stp-items').on('click', '.delete-form', function(){
+    let parrentDiv = $(this).closest('div.removable-item');
     parrentDiv.find('input[id*="DELETE"]:hidden').attr('value', 'on');
     parrentDiv.attr('hidden', true);
 });

@@ -1,0 +1,14 @@
+<div class="content-block">
+    {% if subtitle %}
+    <div class="hp-subtitle">
+        <a href="{% url ''|add:subtitle_url %}">{{ subtitle }}</a>
+    </div>
+    {% endif %}
+    <div class="content-block-wrapper">
+        {% for instance in instance_list %}
+        {% include template_path %}
+        {% empty %}
+        <span class="empty-msg">{{ empty_msg }}</span>
+        {% endfor %}
+    </div>
+</div>

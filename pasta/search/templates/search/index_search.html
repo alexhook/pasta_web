@@ -13,7 +13,7 @@
 <div class="recipe-list-wrapper">
 {% include './includes/search_header_block.html' with title='Рецепты' list=recipe_list %}
 <div class="recipe-list">
-    {% for recipe in recipe_list|slice:":5" %}
+    {% for instance in recipe_list|slice:":5" %}
     {% include 'recipes/includes/recipe_preview_block.html' %}
     {% endfor %}
     {% if recipe_list.count > 5 %}

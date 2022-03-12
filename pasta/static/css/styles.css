@@ -1,4 +1,7 @@
 /* main styles */
+*, ::after, ::before {
+    box-sizing: inherit;
+}
 body
 {
 	background-color: #cccccc;
@@ -9,6 +12,7 @@ body
     min-height: 100vh;
     margin: 0;
     font-family: Georgia;
+    line-height: normal;
 }
 .content-frame 
 {
@@ -120,6 +124,27 @@ a
 {
     text-decoration: none;
 }
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="time"],
+select,
+textarea
+{
+    max-width: 200px;
+    min-height: 25px;
+    color: #3a3a3a;
+    border-radius: 5px;
+    border: #7a7a7aeb 1px solid;
+    padding-left: 10px;
+    font-size: .95em;
+}
+select
+{
+    padding-left: 5px;
+}
+/* end main styles */
 
 
 /* header styles */
@@ -138,70 +163,91 @@ header
     box-shadow: 3px 5px 10px rgb(196, 196, 196);
     z-index: 10;
 }
-header .logo
+header div#nav-logo
 {
-    position: relative;
     padding-left: 30px;
 }
-header .logo img
+header div#nav-logo img
 {
-    max-width: 50px;
+    max-width: 55px;
 }
-header .navigation
+
+
+header .nav-items ul
 {
     display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin: 0px 10px;
-    padding-left: 0;
-    transform: translateX(-20%);
+    margin: 0;
+    padding: 0;
+    width: 100%;
 }
-header .navigation li
+header .nav-items li
 {
-    list-style: none;
-    margin: 0px 10px;
+    margin: 0 5px;
 }
-header .navigation li a
+header .nav-items li a
 {
-    color: #222222;
+    color: #292929;
 }
-header .applinks li a
+
+
+
+
+header div#nav-applinks
 {
-    font-size: 0.9em;
+    width: 15%;
+    margin-left: -2%;
+}
+header div#nav-applinks ul
+{
+    justify-content: space-around;
+}
+header div#nav-applinks li a
+{
+    font-size: 1.08em;
     font-weight: bold;
-    letter-spacing: 1.5px;
-    padding: 0 0.3em 0 0.3em;
+    letter-spacing: .1em;
 }
-header .applinks li a:hover
+header div#nav-applinks li a:hover
 {
     color: #dba632;
 }
-header .search
+
+
+
+
+
+header div#nav-search
 {
     position: relative;
-    width: 300px;
-    height: 35px;
-    transform: translateX(-35%);
+    width: 30%;
+    height: 40px;
 }
-header .search input
+header div#nav-search form
+{
+    width: 100%;
+    height: 100%;
+}
+header div#nav-search input
 {
     position: relative;
     top: 0;
     left: 0;
-    width: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    width: calc(100% - 62px);
     height: 100%;
     color: #222222;
     background: transparent;
     outline: none;
     border: 1px solid #222222;
     border-radius: 4px;
-    padding: 0px 10px 0px 50px;
+    padding: 0 10px 0 50px;
 }
-header .search input::placeholder
+header div#nav-search input::placeholder
 {
-    color: #222222
+    color: #919191
 }
-header .search .fa-search
+header div#nav-search .fa-search
 {
     position: absolute;
     top: 50%;
@@ -211,7 +257,11 @@ header .search .fa-search
     border-right: 1px solid #222222;
     padding-right: 10px;
 }
-header .usertools li a
+
+
+
+
+header div#nav-usertools li a
 {
     font-size: 0.8em;
     padding: 0 0.3em 0 0.3em;
@@ -228,7 +278,7 @@ header .usertools li a
     grid-row-gap: 0.3em;
     grid-column-gap: 0.3em;
     align-items: center;
-    margin: 2em 0 2em 0;
+    margin: 16px 0;
     max-width: 750px;
     letter-spacing: .038em;
 }
@@ -306,6 +356,8 @@ header .usertools li a
 {
     display: block;
 }
+/* end recipe-detail styles */
+
 
 /* author-panel block */
 .author-panel
@@ -368,6 +420,8 @@ header .usertools li a
     color: white;
 
 }
+/* end author-panel block */
+
 
 /* recipe-deatil info-block */
 .info-block
@@ -484,6 +538,8 @@ header .usertools li a
     font-size: 1.05em;
     line-height: 1.3;
 }
+/* end recipe-deatil info-block */
+
 
 /* ingredients-list block */
 .ingredients-list
@@ -524,6 +580,8 @@ header .usertools li a
     grid-column: 3;
     color: #222222;
 }
+/* end ingredients-list block */
+
 
 /* steps-list block */
 .steps-list
@@ -535,7 +593,7 @@ header .usertools li a
     margin-top: 25px;
     padding-left: .8%;
 }
-.step
+.steps-list .step
 {
     display: grid;
     grid-template-columns: 45fr 55fr;
@@ -543,18 +601,18 @@ header .usertools li a
     margin: 30px 0;
     max-width: 900px;
 }
-.step .cover-wrapper
+.steps-list .step .cover-wrapper
 {
     grid-column: 1;
     width: 100%;
     height: 250px;
 }
-.step .cover-wrapper img
+.steps-list .step .cover-wrapper img
 {
     width: 100%;
     height: 100%;
 }
-.step span
+.steps-list .step span
 {
     grid-column: 2;
     font-size: 1.05em;
@@ -562,6 +620,7 @@ header .usertools li a
     line-height: 1.7;
     padding-top: 20px;
 }
+/* end steps-list block */
 
 
 /* footer styles */
@@ -612,6 +671,7 @@ footer .github-link #github-oct
 {
     width: 35px;
 }
+/* end footer styles */
 
 
 /* messages styles */
@@ -658,6 +718,7 @@ div.messages div.error
     color: #990008f2;
     background-color: #d68c8ccc;
 }
+/* end messages styles */
 
 
 /* wiki_preview_block styles */
@@ -673,6 +734,11 @@ div.messages div.error
     display: grid;
     grid-template-columns: repeat(12, 1fr);
     grid-template-rows: repeat(8, 25px) auto;
+    transition: 0.1s all;
+}
+.wiki-preview a:hover
+{
+    transform: scale(1.015);
 }
 .wiki-preview .cover-wrapper
 {
@@ -707,6 +773,8 @@ div.messages div.error
     padding: 0 1%;
     color: #161616;
 }
+/* end wiki_preview_block styles */
+
 
 /* wiki_list styles */
 .group-list
@@ -761,3 +829,294 @@ div.messages div.error
 {
     height: var(--cover-height);
 }
+/* end wiki_list styles */
+
+
+/* homepage styles */
+.main-block
+{
+    margin-bottom: 20px;
+}
+.main-block .hp-title
+{
+    margin: 20px 0 10px 10px;
+    font-weight: bold;
+    font-size: 1.7em;
+    letter-spacing: .15em;
+}
+.main-block .hp-subtitle
+{
+    margin: 20px 0 0 10px;
+    font-weight: bold;
+    font-size: 1.3em;
+    letter-spacing: .1em;
+}
+.main-block .hp-title a,
+.main-block .hp-subtitle a
+{
+    color: #222222;
+}
+.main-block .hp-title a:hover,
+.main-block .hp-subtitle a:hover
+{
+    color: #dba632;
+}
+.main-block .content-block
+{
+    margin-bottom: 50px;
+}
+.main-block .content-block .content-block-wrapper
+{
+    display: flex;
+    flex-direction: column;
+}
+/* end homepage styles */
+
+
+/* profile styles */
+input.form-control
+{
+    max-width: 250px;
+    min-height: auto;
+    color: #474747;
+    letter-spacing: .033em;
+}
+.change-personal-info
+{
+    margin-bottom: 30px;
+}
+.change-personal-info .user-photo
+{
+    margin-bottom: 20px;
+}
+.change-personal-info .user-photo input[type="checkbox"]
+{
+    margin-left: 10px;
+}
+.change-personal-info .cover-wrapper
+{
+    width: 200px;
+    height: 200px;
+    margin: 20px;
+    margin-top: 0;
+}
+.change-personal-info .cover-wrapper img
+{
+    width: 100%;
+    height: 200px;
+}
+.change-personal-info .credentials
+{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+    letter-spacing: .033em;
+}
+.change-personal-info .credentials input
+{
+    margin: 3px 0 10px 0;
+}
+.password-change ul li
+{
+    font-size: .9em;
+    color: #4e4e4e;
+}
+.filter-form input[type="submit"]
+{
+    max-height: 15px;
+    padding: 8px 10px;
+    padding-top: 2px;
+}
+.filter-form
+{
+    margin-bottom: 15px;
+}
+.filter-form form
+{
+    display: flex;
+    align-items: center;
+}
+.filter-form form select
+{
+    margin-left: 6px;
+    margin-right: 10px;
+}
+/* end profile styles */
+
+
+/* recipe-form styles */
+.recipe-form
+{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 50px;
+}
+.form-block
+{
+    margin-bottom: 30px;
+}
+.form-block h3
+{
+    font-weight: 600;
+    letter-spacing: .033em;
+    margin-bottom: 15px;
+}
+.block-items label
+{
+    margin-right: 8px;
+}
+#cuisine-item select,
+#menu-item select
+{
+    max-width: 300px;
+    width: 300px;
+}
+#title-item textarea
+{
+    max-width: 100%;
+    width: 100%;
+    height: 70px;
+    border: none;
+    font-size: 1.8em;
+    margin-bottom: 5px;
+    resize: none;
+}
+#title-item textarea:focus
+{
+    outline: none;
+}
+#desc-item textarea
+{
+    resize: none;
+    max-width: 500px;
+    width: 500px;
+}
+#img-item
+{
+    display: flex;
+    flex-direction: column;
+}
+#img-item .cover-wrapper
+{
+    width: 400px;
+    height: 250px;
+    margin-bottom: 15px;
+}
+#img-item .cover-wrapper img
+{
+    width: 100%;
+    height: 250px;
+}
+#img-item input
+{
+    margin-left: 10px;
+}
+#rcp
+{
+    display: flex;
+}
+.items-wrapper
+{
+    margin: 10px;
+    margin-bottom: 15px;
+}
+.block-items
+{
+    margin: 5px 0;
+}
+#cvr-wrapper
+{
+    margin-right: 5%;
+}
+#othr-wrapper
+{
+    margin-top: 30px;
+}
+#desc-item
+{
+    margin-top: 40px;
+}
+#desc-item textarea
+{
+    max-width: 100%;
+    width: 100%;
+    padding: 8px;
+    padding-right: 0;
+}
+.recipe-form .ingredient
+{
+    margin-bottom: 2px;
+}
+.recipe-form .ingredient .delete-form:hover
+{
+    cursor: pointer;
+}
+.recipe-form .ingredient input,
+.recipe-form .ingredient select
+{
+    width: 200px;
+    margin-right: 5px;
+}
+.form-block .btn
+{
+    margin-top: 10px;
+}
+.recipe-form .step
+{
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 50px;
+}
+.recipe-form .step .img-wrapper,
+.recipe-form .step .othr-wrapper
+{
+    display: flex;
+    flex-direction: column;
+}
+.recipe-form .step .img-wrapper
+{
+    margin-right: 30px;
+}
+.recipe-form .step .othr-wrapper .btn
+{
+    max-width: 75px;
+    margin-left: 10px;
+}
+.recipe-form .step .img-wrapper input
+{
+    margin: 15px;
+    margin-bottom: 0;
+}
+.recipe-form .step *
+{
+    display: inline-block;
+    margin-right: 5px;
+}
+.recipe-form .step textarea
+{
+    resize: none;
+    max-width: 100%;
+    width: 500px;
+    height: 200px;
+    margin-top: 20px;
+}
+.recipe-form .step .cover-wrapper
+{
+    width: 380px;
+    height: 250px;
+}
+.recipe-form .step .cover-wrapper img
+{
+    width: 100%;
+    height: 100%;
+}
+#add-stp-btn
+{
+    margin-top: -20px;
+}
+div#btns-block .btn
+{
+    margin: 5px;
+    margin-top: 25px;
+}
+/* end recipe-form styles */

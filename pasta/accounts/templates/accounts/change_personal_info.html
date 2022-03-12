@@ -6,30 +6,27 @@
 {% block sidebar %}
 {% include "./includes/sidebar.html" %}
 {% endblock %}
-<form action="" method="post" enctype="multipart/form-data">
+<form action="" method="post" enctype="multipart/form-data" class="change-personal-info">
     {% csrf_token %}
-    <div>
-        <p>
-            {{ form.photo.label }}<br>
+    <div class="user-photo">
+        <div class="cover-wrapper">
             {% if request.user.photo %}
-            <img src="{{ request.user.photo.url }}" width="100" height="100"><br>
+            <img src="{{ request.user.photo.url }}">
             {% else %}
-            {% include 'accounts/includes/default_user_photo.html' %}<br>
+            {% include 'accounts/includes/default_user_photo.html' %}
             {% endif %}
-            {{ form.photo }}
-            {{ form.photo.errors }}
-        </p>
-        <p>
-            {{ form.first_name.label }}<br>
-            {{ form.first_name }}
-            {{ form.first_name.errors }}
-        </p>
-        <p>
-            {{ form.last_name.label }}<br>
-            {{ form.last_name }}
-            {{ form.last_name.errors }}
-        </p>
+        </div>
+        {{ form.photo }}
+        {{ form.photo.errors }}
     </div>
-    <input type="submit" value="Изменить">
+    <div class="credentials">
+        {{ form.first_name.label }}
+        {{ form.first_name }}
+        {{ form.first_name.errors }}
+        {{ form.last_name.label }}
+        {{ form.last_name }}
+        {{ form.last_name.errors }}
+    </div>
+    <input type="submit" class="btn btn-primary" value="Сохранить"></button>
 </form>
 {% endblock %}

@@ -1,12 +1,12 @@
-{% if recipe.author != user %}
-<form class="favorite-update-form" action="{% url 'favorites-update' recipe.slug %}" method="post">
+{% if instance.author != user %}
+<form class="favorite-update-form" action="{% url 'favorites-update' instance.slug %}" method="post">
     {% csrf_token %}
     <button type="submit">
-        <i class="far fa-bookmark fa-lg{% if recipe in favorites %} marked{% endif %}"></i>
+        <i class="far fa-bookmark fa-lg{% if instance in favorites %} marked{% endif %}"></i>
     </button>
-    <span class="favorite-count">{{ recipe.user_set.count | default:0 }}</span>
+    <span class="favorite-count">{{ instance.user_set.count | default:0 }}</span>
 </form>
 {% else %}
 <i class="far fa-bookmark fa-lg"></i>
-<span class="favorite-count">{{ recipe.user_set.count | default:0 }}</span>
+<span class="favorite-count">{{ instance.user_set.count | default:0 }}</span>
 {% endif %}

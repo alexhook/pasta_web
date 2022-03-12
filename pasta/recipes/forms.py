@@ -1,14 +1,33 @@
+from cProfile import label
 import datetime
 from django import forms
-from django.forms import ModelForm
+from django.forms import ModelForm, ModelChoiceField, CharField
 from django.forms.formsets import BaseFormSet
 from django.forms.models import BaseModelFormSet
-from .models import Menu, Cuisine, Recipe, RecipeIngredient, RecipeStep
+from .models import Menu, Cuisine, Recipe, RecipeIngredient, RecipeStep, AmoutUnit
+from wiki.models import Ingredient
 from django.core.exceptions import ValidationError
 from utils.func import both
 from .widgets import ImageWidget
 
 class RecipeModelForm(ModelForm):
+    title = CharField(
+        min_length=5,
+        max_length=50,
+        widget=forms.Textarea(attrs={
+            'placeholder': 'Введите название блюда...'
+        })
+    )
+    description = CharField(
+        min_length=50,
+        max_length=1000,
+        widget=forms.Textarea(attrs={
+            'placeholder': 'Расскажите нашим читателям немного об этом блюде. Например, об истории его происхождения...'
+        })
+    )
+    cuisine = ModelChoiceField(Cuisine.objects.order_by('name'), empty_label='', label='Кухня')
+    menu = ModelChoiceField(Menu.objects.order_by('name'), empty_label='', label='Меню')
+
     class Meta:
         model = Recipe
         exclude = ['slug', 'author', 'creation_date']
@@ -27,20 +46,12 @@ class RecipeModelForm(ModelForm):
 class RecipeFilterForm(forms.Form):
     menu = forms.ModelChoiceField(queryset=Menu.objects.all(), required=False, label='Меню', empty_label='Все')
     cuisine = forms.ModelChoiceField(queryset=Cuisine.objects.all(), required=False, label='Кухня', empty_label='Все')
-    sortby = forms.ChoiceField(
-        choices=(
-            ('', 'Нет'),
-            ('1', 'Сначала популярные'), 
-            ('2', 'Сначала непопулярные'),
-            ('3', 'Сначала новые'),
-            ('4', 'Сначала старые'),
-        ), 
-        required=False,
-        label='Сортировка'
-    )
 
 
 class RecipeIngredientModelForm(ModelForm):
+    ingredient = ModelChoiceField(Ingredient.objects.order_by('name'), empty_label='', label=None)
+    unit = ModelChoiceField(AmoutUnit.objects.order_by('name'), empty_label='', label=None)
+
     class Meta:
         model = RecipeIngredient
         fields = ['ingredient', 'unit', 'amount', 'recipe']
@@ -59,6 +70,14 @@ class RecipeIngredientModelForm(ModelForm):
 
 
 class RecipeStepModelForm(ModelForm):
+    description = CharField(
+        max_length=1000,
+        label=None,
+        widget=forms.Textarea(attrs={
+            'placeholder': 'Опишите ваши действия...'
+        })
+    )
+
     class Meta:
         model = RecipeStep
         fields = '__all__'
