@@ -12,7 +12,6 @@ urlpatterns = [
     path('signup/', views.signup, name='signup'),
     path('confirm_email/', views.send_activation_message, name='confirm_email'),
     path('activate/<uidb64>/<token>/', views.activate, name='activate-account'),
-    path('profile/', views.index, name='profile-index'),
     path('profile/change_personal_info/', views.change_user_personal_info, name='change-personal-info'),
     path('profile/password_change/', views.password_change, name='password-change'),
     path('profile/myrecipes/', views.MyRecipesListView.as_view(), name='myrecipes'),

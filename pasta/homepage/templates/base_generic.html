@@ -33,26 +33,38 @@
     <div class="nav-items" id="nav-usertools">
       <ul>
         {% if user.is_authenticated %}
-        <li>
-          <a href="/admin/">Админ</a>
+        {% if user.is_staff %}
+        <li id="admin">
+          <a href="/admin/">
+            <i class="fa-solid fa-screwdriver-wrench fa-xl"></i>
+          </a>
         </li>
-        <li>
-          <a href="{% url 'favorites' %}">Избранное</a>
+        {% endif %}
+        <li id="favorites">
+          <a href="{% url 'favorites' %}">
+            <i class="fa-solid fa-bookmark fa-xl"></i>
+          </a>
         </li>
-        <li>
-          <a href="{% url 'recipe-create' %}">Добавить рецепт</a>
+        <li id="recipe-create">
+          <a href="{% url 'recipe-create' %}">
+            <i class="fa-solid fa-square-plus fa-xl"></i>
+          </a>
         </li>
-        <li>
-          <a href="{% url 'profile-index' %}">Личный кабинет</a>
+        <li id="profile">
+          <a href="{% url 'change-personal-info' %}">
+            <i class="fa-solid fa-user fa-xl"></i>
+          </a>
         </li>
-        <li>
+        <li id="logout">
           <a href="{% url 'logout' %}">
-            <i class="fa fa-times" aria-hidden="true"></i>
+            <i class="fa-solid fa-right-from-bracket fa-xl"></i>
           </a>
         </li>
         {% else %}
-        <li>
-          <a href="{% url 'login' %}">Войти</a>
+        <li class="jst-end" id="login">
+          <a href="{% url 'login' %}">
+            <i class="fa-solid fa-right-to-bracket fa-xl"></i>
+          </a>
         </li>
         {% endif %}
       </ul>

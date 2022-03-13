@@ -150,12 +150,12 @@ select
 /* header styles */
 header
 {
+    display: flex;
     position: absolute;
     top: 0px;
     left: 0px;
     width: 100%;
     height: 40px;
-    display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 15px 0;
@@ -163,16 +163,11 @@ header
     box-shadow: 3px 5px 10px rgb(196, 196, 196);
     z-index: 10;
 }
-header div#nav-logo
+header .nav-items
 {
-    padding-left: 30px;
+    display: inline-block;
+    position: absolute;
 }
-header div#nav-logo img
-{
-    max-width: 55px;
-}
-
-
 header .nav-items ul
 {
     display: flex;
@@ -191,11 +186,22 @@ header .nav-items li a
 
 
 
+header div#nav-logo
+{
+    left: 2.5%;
+}
+header div#nav-logo img
+{
+    max-width: 55px;
+}
+
+
+
 
 header div#nav-applinks
 {
+    left: 13%;
     width: 15%;
-    margin-left: -2%;
 }
 header div#nav-applinks ul
 {
@@ -218,7 +224,7 @@ header div#nav-applinks li a:hover
 
 header div#nav-search
 {
-    position: relative;
+    left: 35%;
     width: 30%;
     height: 40px;
 }
@@ -260,11 +266,47 @@ header div#nav-search .fa-search
 
 
 
-
+header div#nav-usertools
+{
+    right: 3%;
+    width: 25%;
+}
+header div#nav-usertools li
+{
+    display: inline-block;
+    margin: auto;
+    transition: all .5s;
+}
+header div#nav-usertools li.jst-end {
+    margin: 0;
+    margin-left: auto;
+}
 header div#nav-usertools li a
 {
-    font-size: 0.8em;
+    font-size: 0.85em;
+    letter-spacing: .033em;
     padding: 0 0.3em 0 0.3em;
+}
+header div#nav-usertools li#admin i:hover
+{
+    color: rgb(133, 133, 133);
+}
+header div#nav-usertools li#recipe-create i:hover
+{
+    color: #dba632;
+}
+header div#nav-usertools li#profile i:hover
+{
+    color: #38a33d;
+}
+header div#nav-usertools li#login i:hover,
+header div#nav-usertools li#logout i:hover
+{
+    color: #1c7ed6;
+}
+header div#nav-usertools li#favorites i
+{
+    color: rgb(216, 50, 50);
 }
 /* end header styles */
 

@@ -19,13 +19,6 @@ from utils.func import is_ajax
 from recipes.views import RecipeBaseListView, RecipeListView
 
 
-@login_required
-def index(request: HttpRequest):
-    return render(
-        request,
-        'accounts/profile_index.html',
-    )
-
 def send_activation_message(request: HttpRequest, user=None):
     if user is None:
         user = request.user
