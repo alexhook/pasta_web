@@ -46,9 +46,6 @@ INSTALLED_APPS = [
     'recipes.apps.RecipesConfig',
     'search.apps.SearchConfig',
     'accounts.apps.AccountsConfig',
-    # 'debug_toolbar',
-    'django_extensions',
-    'django_select2',
     'active_link',
 ]
 
@@ -60,7 +57,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'pasta.urls'
@@ -89,16 +85,7 @@ CACHES = {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
     },
-    'select2': {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379/2",
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient",
-        }
-    }
 }
-
-SELECT2_CACHE_BACKEND = "select2"
 
 WSGI_APPLICATION = 'pasta.wsgi.application'
 
