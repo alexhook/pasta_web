@@ -1,0 +1,6 @@
+django==4.0
+django-active-link==0.1.8
+mysqlclient==2.1.0
+Pillow==9.0.0
+pytils==0.3
+django-redis==5.2.0
