@@ -71,8 +71,8 @@
     </div>
   </header>
   {% endblock header %}
-  <div class="content-frame">
-    <div class="content">
+  <main>
+    <div class="content-wrapper">
       {% block messages %}
       {% if messages %}
       <div class="messages">
@@ -116,7 +116,7 @@
       {% endif %}
       {% endblock %}
     </div>
-  </div>
+  </main>
   {% block footer %}
   <footer>
     <div class="logo unselectable" title="made by Alexander Maximenyuk">PASTA</div>
