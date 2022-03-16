@@ -198,7 +198,7 @@ And we change the following lines:
 
 ### Installing and Configuring MySQL
 
-If MySQL Server and MySQL Client are not installed on your computer, then click on [link](https://dev.mysql.com/doc/mysql-apt-repo-quick-guide/en /)
+If MySQL Server and MySQL Client are not installed on your computer, then click on [link](https://dev.mysql.com/doc/mysql-apt-repo-quick-guide/en/) 
 and install it.  
   
 Connecting to MySQL:  
